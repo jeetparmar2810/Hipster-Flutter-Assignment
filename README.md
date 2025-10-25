@@ -1,116 +1,165 @@
-# hipster_inc_assignment
+# 🎯 Hipster Flutter Assignment – Agora Video App
 
-**Modern Society Management Made Simple**
+**Modern Flutter application demonstrating one-to-one video calls, REST API user management, and store-ready design using Agora SDK. Built with BLoC pattern for robust state management. Local storage is implemented with Hive.**
 
-Nakshatra Aspire is a comprehensive Flutter-based mobile application designed to streamline society management operations, enhance community engagement, and provide seamless communication between residents and management.
+---
+
+## 🧩 Project Overview
+
+This Flutter application showcases:
+
+- Splash screen and app launch flow
+- Secure **email/password login** with validation
+- REST API **user list screen** with offline caching using **Hive**
+- **One-to-one video call** using **Agora RTC Engine**
+- Proper **BLoC-based state management** and **error handling**
+- Store-ready configurations (permissions, icons, versioning)
 
 ---
 
 ## ✨ Features
 
-* **🔐 Login & Registration** – Secure authentication system for residents and administrators
-* **👥 Member Management** – Comprehensive member profile details and flat information
-* **💳 Maintenance Payment** – Easy online payment gateway for monthly maintenance charges
-* **🧾 Maintenance Receipt** – Instant digital receipts with detailed payment breakdowns
-* **🚗 Vehicle Management** – Track and manage resident vehicles
-* **📜 Payment History** – Complete transaction history with search and filter options
-* **📊 Reports** – Generate detailed financial and operational reports for transparency
-* **📢 Updates** – Real-time society announcements, notices, and important updates
+### 1. Splash Screen
+- Animated logo launch screen
+- Automatically navigates to Login screen
+
+### 2. Login Screen
+- Email and password input
+- Validation: empty fields + email format
+- Mock authentication via **ReqRes API** or hardcoded credentials
+- Login flow managed using **AuthBloc**
+
+### 3. User List Screen
+- Fetches user data from fake REST API
+- Shows avatar + name in scrollable list
+- **Offline caching using Hive**
+- Pull-to-refresh to reload data
+- State handled via **UserBloc**
+
+### 4. One-to-One Video Call
+- Built with **Agora RTC Engine**
+- Join call using **hardcoded meeting/channel ID**
+- Show **local camera feed** and **remote participant**
+- Audio mute/unmute & video enable/disable
+- Handles **camera/microphone permissions**
+- Works on Android and iOS
+- Call logic managed via **VideoBloc**
 
 ---
 
-## 🚀 Getting Started
+## 🛠️ Tech Stack
+
+| Feature          | Technology                   |
+|------------------|------------------------------|
+| Framework        | Flutter (latest stable)      |
+| Language         | Dart                         |
+| Video SDK        | Agora RTC Engine             |
+| State Management | BLoC Pattern                 |
+| REST API         | ReqRes                       |
+| Local Storage    | Hive                         |
+| Permissions      | Camera, Microphone, Internet |
+
+---
+
+## ⚙️ Getting Started
 
 ### Prerequisites
-
-* Flutter SDK (3.0 or higher)
-* Dart SDK (3.0 or higher)
-* Android Studio / VS Code with Flutter extensions
-* An Android or iOS device/emulator
+- Flutter SDK ≥ 3.10
+- Dart SDK ≥ 3.0
+- Android Studio / VS Code with Flutter plugin
 
 ### Installation
 
-1. **Clone the repository**
+```bash
+# Clone repository
+git clone https://github.com/jeetparmar2810/Hipster-Flutter-Assignment.git
+cd Hipster-Flutter-Assignment
 
-   ```bash
-   git clone https://github.com/nakshatra-aspire-web/nakshatra-aspire.git
-   cd nakshatra-aspire
-   ```
+# Install dependencies
+flutter pub get
 
-2. **Install dependencies**
-
-   ```bash
-   flutter pub get
-   ```
-
-3. **Run the application**
-
-   ```bash
-   flutter run
-   ```
-
----
-
-## 📱 Screenshots
-
-<div align="center">
-  <img src="assets/screenshots/login.png" alt="Login Screen" width="30%" />
-  <img src="assets/screenshots/users.png" alt="User List Screen" width="30%" />
-  <img src="assets/screenshots/userDetails.png" alt="User Details" width="30%" /> 
-</div>
+# Run on device or emulator
+flutter run
 
 
----
+📡 Agora RTC Setup
 
-## 🛠️ Built With
+Create an Agora developer account
 
-* **[Flutter](https://flutter.dev/)** – Google's UI toolkit for building natively compiled applications
-* **[Dart](https://dart.dev/)** – Programming language optimized for building mobile apps
-* **Firebase** *(if applicable)* – Backend services for authentication and database
-* **RiverPod** *(if applicable)* – State management solution
+Generate App ID
 
----
+Add App ID in agora_service.dart
 
-## 📚 Project Structure
+Run on two devices/emulators to test one-to-one video calls
 
-```
+Ensure camera & mic permissions are added in:
 
----
+Android: AndroidManifest.xml
 
-## 🤝 Contributing
+iOS: Info.plist
 
-We welcome contributions to Nakshatra Aspire! Please follow these steps:
+🖼️ Screenshots
+<div align="center"> <img src="assets/screenshots/splash.png" width="28%" /> <img src="assets/screenshots/login.png" width="28%" /> <img src="assets/screenshots/user_list.png" width="28%" /> <img src="assets/screenshots/video_call.png" width="28%" /> </div>
+🧩 Key BLoC Components
+Screen / Feature	BLoC
+Login	AuthBloc
+User List	UserBloc
+Video Call	VideoBloc
 
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+All API calls, state changes, and UI updates are handled via BLoC for a clean separation of concerns.
 
----
+🧩 Bonus Features
 
-## 📄 License
+Mute/unmute audio & enable/disable video
 
-This project is licensed under the MIT License – see the [LICENSE](LICENSE) file for details.
+Offline caching for user list using Hive
 
----
+Graceful handling of app lifecycle (background, orientation changes)
 
-## 📞 Contact & Support
+📄 Build & Deployment
+Android
+flutter build apk --release
 
-* **Email**: [applicationnakshatra@gmail.com](mailto:applicationnakshatra@gmail.com)
-* **Website**: [https://nakshatra-aspire-web.github.io/ns/index.html](https://nakshatra-aspire-web.github.io/ns/index.html)
-* **Issue Tracker**: [GitHub Issues](https://github.com/nakshatra-aspire-web/nakshatra-aspire/issues)
+iOS
+flutter build ios --release
 
----
 
-## 🙏 Acknowledgments
+Make sure camera and microphone permissions are enabled in both platform manifests.
 
-* Flutter team for the amazing framework
-* All contributors who have helped shape this project
-* The open-source community for inspiration and resources
+🧠 Assumptions & Limitations
 
----
+Meeting ID and credentials are hardcoded for demo purposes.
 
-**Made with ❤️ for better community living**
+API data fetched from ReqRes (no backend setup required).
 
-*Transforming society management, one feature at a time.*
+Screen sharing may depend on SDK and platform support.
+
+🤝 Contributing
+
+Contributions are welcome!
+
+Fork the repo
+
+Create your feature branch (feature/my-feature)
+
+Commit changes (git commit -m 'Add some feature')
+
+Push to branch (git push origin feature/my-feature)
+
+Open a Pull Request
+
+📄 License
+
+This project is licensed under the MIT License — see the LICENSE
+ file for details.
+
+📞 Contact
+
+Jeet Parmar
+📧 jeet.mobiledeveloper@gmail.com
+
+🌐 Portfolio Website
+
+💼 LinkedIn
+
+Made with ❤️ using Flutter, BLoC, Hive, and Agora RTC Engine
