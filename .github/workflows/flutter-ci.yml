@@ -14,19 +14,19 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1️⃣ Checkout code
+      # Checkout code
       - uses: actions/checkout@v4
 
-      # 2️⃣ Setup Flutter (latest stable, includes Dart 3.9.x+)
+      # Setup Flutter (latest stable, includes Dart 3.9.x+)
       - uses: subosito/flutter-action@v2
         with:
           channel: stable
 
-      # 3️⃣ Verify Flutter/Dart versions
+      # Verify Flutter/Dart versions
       - name: Flutter Doctor
         run: flutter doctor -v
 
-      # 4️⃣ Cache Pub packages
+      # Cache Pub packages
       - name: Cache Pub packages
         uses: actions/cache@v3
         with:
@@ -35,14 +35,14 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-flutter-
 
-      # 5️⃣ Install dependencies
+      # Install dependencies
       - run: flutter pub get
 
-      # 6️⃣ Run analyzer & tests
+      # Run analyzer & tests
       - run: flutter analyze
       - run: flutter test
 
-      # 7️⃣ Decode keystore (for signing release)
+      # Decode keystore (for signing release)
       - name: Setup keystore
         env:
           KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
@@ -50,7 +50,7 @@ jobs:
           mkdir -p android/app
           echo "$KEYSTORE_BASE64" | base64 --decode > android/app/my-key.jks
 
-      # 8️⃣ Create key.properties
+      # Create key.properties
       - name: Create key.properties
         env:
           KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
@@ -62,15 +62,15 @@ jobs:
           echo "keyAlias=$KEY_ALIAS" >> android/key.properties
           echo "storeFile=app/my-key.jks" >> android/key.properties
 
-      # 9️⃣ Build split APKs per ABI
+      # Build split APKs per ABI
       - name: Build Release APK (split per ABI)
         run: flutter build apk --release --split-per-abi
 
-      # 🔟 Build App Bundle for Play Store
+      # Build App Bundle for Play Store
       - name: Build App Bundle
         run: flutter build appbundle --release
 
-      # 1️⃣1️⃣ Upload artifacts
+      # Upload artifacts
       - name: Upload APKs and AAB
         uses: actions/upload-artifact@v4
         with:
