@@ -27,6 +27,7 @@ class _AppTextFieldState extends State<AppTextField> {
   late FocusNode _focusNode;
   bool _isFocused = false;
   late bool _isPasswordVisible;
+  bool _hasError = false;
 
   @override
   void initState() {
@@ -75,8 +76,23 @@ class _AppTextFieldState extends State<AppTextField> {
         focusNode: _focusNode,
         keyboardType: widget.keyboardType,
         obscureText: isPasswordField ? !_isPasswordVisible : false,
-        validator: widget.validator,
-        style: const TextStyle(color: Colors.white, fontSize: 16),
+        validator: (value) {
+          final error = widget.validator?.call(value);
+          // Update error state for UI changes
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (mounted) {
+              setState(() {
+                _hasError = error != null;
+              });
+            }
+          });
+          return error;
+        },
+        style: const TextStyle(
+          color: Colors.white, // Pure white text
+          fontSize: 16,
+          fontWeight: FontWeight.w400,
+        ),
         cursorColor: Colors.white,
         decoration: InputDecoration(
           filled: true,
@@ -84,22 +100,24 @@ class _AppTextFieldState extends State<AppTextField> {
           contentPadding:
           const EdgeInsets.symmetric(vertical: 16, horizontal: 14),
 
-          // Label
-          labelText: widget.label,
-          labelStyle: TextStyle(
-            color: _isFocused
-                ? AppColors.primaryLight
-                : Colors.white.withValues(alpha: 0.7),
+          // Hint - Always visible inside the field
+          hintText: widget.label,
+          hintStyle: TextStyle(
+            color: Colors.white.withValues(alpha: 0.6),
+            fontSize: 16,
+            fontWeight: FontWeight.w400,
           ),
-          floatingLabelBehavior: FloatingLabelBehavior.auto,
 
-          // Prefix icon
+          // Prefix icon - Pure white
           prefixIcon: widget.prefixIcon != null
               ? Icon(
             widget.prefixIcon,
-            color: _isFocused
+            color: _hasError
+                ? AppColors.error
+                : (_isFocused
                 ? AppColors.primaryLight
-                : Colors.white.withValues(alpha: 0.8),
+                : Colors.white), // Pure white
+            size: 22,
           )
               : null,
 
@@ -113,8 +131,7 @@ class _AppTextFieldState extends State<AppTextField> {
                   (Widget child, Animation<double> animation) {
                 return RotationTransition(
                   turns: Tween(begin: 0.75, end: 1.0).animate(animation),
-                  child:
-                  FadeTransition(opacity: animation, child: child),
+                  child: FadeTransition(opacity: animation, child: child),
                 );
               },
               child: Icon(
@@ -122,9 +139,12 @@ class _AppTextFieldState extends State<AppTextField> {
                     ? Icons.visibility
                     : Icons.visibility_off,
                 key: ValueKey<bool>(_isPasswordVisible),
-                color: _isFocused
+                color: _hasError
+                    ? AppColors.error
+                    : (_isFocused
                     ? AppColors.primaryLight
-                    : Colors.white.withValues(alpha: 0.8),
+                    : Colors.white), // Pure white
+                size: 22,
               ),
             ),
           )
@@ -164,7 +184,10 @@ class _AppTextFieldState extends State<AppTextField> {
           errorStyle: TextStyle(
             color: AppColors.error.withValues(alpha: 0.9),
             fontSize: 13,
+            fontWeight: FontWeight.w500,
+            height: 1.2,
           ),
+          errorMaxLines: 2,
         ),
       ),
     );

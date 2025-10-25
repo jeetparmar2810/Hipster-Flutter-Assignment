@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hipster_inc_assignment/utils/app_strings.dart';
+import 'package:hipster_inc_assignment/widgets/no_data.dart';
 
 import '../blocs/user/user_bloc.dart';
 import '../blocs/user/user_event.dart';
@@ -21,7 +23,7 @@ class UserListScreen extends StatelessWidget {
         extendBodyBehindAppBar: true,
         appBar: AppBar(
           title: const Text(
-            'User List',
+            AppStrings.usersTitle,
             style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
           ),
           centerTitle: true,
@@ -46,6 +48,14 @@ class UserListScreen extends StatelessWidget {
                 return const Center(child: AppLoader());
               } else if (state is UserLoaded) {
                 final users = state.users;
+
+                if (users.isEmpty) {
+                  return Center(
+                    child: NoDataWidget(icon: Icons.group,
+                        message: AppStrings.userNotFound),
+                  );
+                }
+
                 return RefreshIndicator(
                   color: Colors.white,
                   backgroundColor: const Color(0xFF00B7C2),

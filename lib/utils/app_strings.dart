@@ -9,6 +9,7 @@ class AppStrings {
   static const String passwordLabel = "Password";
   static const String channelNameArg = 'channelName';
 
+  static const String userNotFound = 'Users not found.';
   static const String emailRequired = "Please enter your email";
   static const String emailInvalid = "Enter a valid email";
   static const String passwordRequired = "Please enter your password";
