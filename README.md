@@ -43,7 +43,6 @@ This Flutter application showcases:
 
 * Built with **Agora RTC Engine**
 * Join call using **hardcoded meeting/channel ID**
-* Show **local camera feed** and **remote participant**
 * Audio mute/unmute & video enable/disable
 * Handles **camera/microphone permissions**
 * Works on Android and iOS
