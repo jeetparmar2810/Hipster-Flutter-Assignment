@@ -8,7 +8,7 @@
 
 This Flutter application showcases:
 
-* Splash screen 
+* Splash screen
 * Secure **email/password login** with validation
 * REST API **user list screen** with offline caching using **Hive**
 * **One-to-one video call** using **Agora RTC Engine**
@@ -30,6 +30,7 @@ This Flutter application showcases:
 * Validation: empty fields + email format
 * Mock authentication via **ReqRes API** or hardcoded credentials
 * Login flow managed using **AuthBloc**
+* **Test login credentials:** `test@test.com` / `123456`
 
 ### 3. User List Screen
 
@@ -53,7 +54,7 @@ This Flutter application showcases:
 ## 🛠️ Tech Stack
 
 | Feature          | Technology                   |
-| ---------------- | ---------------------------- |
+|------------------|------------------------------|
 | Framework        | Flutter (latest stable)      |
 | Language         | Dart                         |
 | Video SDK        | Agora RTC Engine             |
@@ -96,8 +97,8 @@ flutter run
 4. Run on **two devices/emulators** to test one-to-one video calls
 5. Ensure camera & microphone permissions are added in:
 
-    * **Android:** `AndroidManifest.xml`
-    * **iOS:** `Info.plist`
+   * **Android:** `AndroidManifest.xml`
+   * **iOS:** `Info.plist`
 
 ---
 
@@ -105,14 +106,15 @@ flutter run
 
 <div style="display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;">
   <!-- First row -->
-  <img src="assets/screenshots/login.png" style="width: 30%;" />
-  <img src="assets/screenshots/users.png" style="width: 30%;" />
-  <img src="assets/screenshots/userDetails.png" style="width: 30%;" />
+  <img src="assets/screenshots/login.png" style="width: 30%;"  alt="login"/>
+  <img src="assets/screenshots/users.png" style="width: 30%;" alt="users" />
+  <img src="assets/screenshots/userDetails.png" style="width: 30%;" alt="userDetails" />
 
   <!-- Second row -->
-  <img src="assets/screenshots/video.png" style="width: 30%;" />
-  <img src="assets/screenshots/video-1.png" style="width: 30%;" />
-  <img src="assets/screenshots/error.png" style="width: 30%;" />
+
+  <img src="assets/screenshots/video.png" style="width: 30%;" alt="video"/>
+  <img src="assets/screenshots/video-1.png" style="width: 30%;" alt="video-1"/>
+  <img src="assets/screenshots/error.png" style="width: 30%;" alt="error"/>
 </div>
 
 ---
@@ -120,7 +122,7 @@ flutter run
 ## 🧩 Key BLoC Components
 
 | Screen / Feature | BLoC      |
-| ---------------- | --------- |
+|------------------|-----------|
 | Login            | AuthBloc  |
 | User List        | UserBloc  |
 | Video Call       | VideoBloc |
@@ -144,14 +146,6 @@ flutter build ios --release
 ```
 
 > Make sure camera and microphone permissions are enabled in both platform manifests.
-
----
-
-## 🧠 Assumptions & Limitations
-
-* Meeting ID and credentials are **hardcoded** for demo purposes
-* API data fetched from **ReqRes** (no backend setup required)
-* Screen sharing may depend on SDK and platform support
 
 ---
 
