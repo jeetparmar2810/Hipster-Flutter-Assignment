@@ -27,7 +27,7 @@ void main() {
       ),
     );
 
-    await tester.pump();
+    await tester.pump(const Duration(seconds: 2));
     expect(find.byType(MyApp), findsOneWidget);
   });
 }

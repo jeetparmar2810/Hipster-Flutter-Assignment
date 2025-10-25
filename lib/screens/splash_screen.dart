@@ -13,11 +13,10 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(const Duration(seconds: 2), () {
-      // Only navigate if this widget is still mounted
-      if (!mounted) return;
-      AppRoutes.navigateToLogin(context);
-    });
+      Future.delayed(const Duration(seconds: 2), () {
+        if (!mounted) return;
+        AppRoutes.navigateToLogin(context);
+      });
   }
 
   @override
