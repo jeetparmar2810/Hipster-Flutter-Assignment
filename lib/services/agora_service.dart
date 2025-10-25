@@ -1,10 +1,11 @@
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:hipster_inc_assignment/utils/logger.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class AgoraService {
-  static const String appId = '6830ee2b7b324d3f80a4823ee3eab00e';
+  static final String appId = dotenv.env['AGORA_APP_ID'] ?? '';
 
   RtcEngine? _engine;
   int? remoteUid;
@@ -33,7 +34,7 @@ class AgoraService {
 
       _engine = createAgoraRtcEngine();
 
-      await _engine!.initialize(const RtcEngineContext(
+      await _engine!.initialize( RtcEngineContext(
         appId: appId,
         channelProfile: ChannelProfileType.channelProfileCommunication,
       ));
@@ -98,7 +99,7 @@ class AgoraService {
       currentChannel = channelName;
 
       await _engine!.joinChannel(
-        token: '007eJxTYChc9+qoVu6bzDoFoUTFtZae/O0FZ3v1lzy8bNVQLGxYV6/AYGZhbJCaapRknmRsZJJinGZhkGhiYWScmmqcmphkYJDqNetPRkMgI8Mk8xtMjAwQCOKzMJSkFpcwMAAAA0se6g==',
+        token: '',
         channelId: channelName,
         uid: 0,
         options: const ChannelMediaOptions(
