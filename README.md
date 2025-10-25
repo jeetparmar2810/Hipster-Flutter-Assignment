@@ -103,12 +103,16 @@ flutter run
 
 ## 🖼️ Screenshots
 
-<div align="center">
-<img src="assets/screenshots/splash.png" width="24%" />
-<img src="assets/screenshots/login.png" width="24%" />
-<img src="assets/screenshots/users.png" width="24%" />
-<img src="assets/screenshots/userDetails.png" width="24%" />
+<div style="display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;">
+  <!-- First row -->
+  <img src="assets/screenshots/login.png" style="width: 30%;" />
+  <img src="assets/screenshots/users.png" style="width: 30%;" />
+  <img src="assets/screenshots/userDetails.png" style="width: 30%;" />
 
+  <!-- Second row -->
+  <img src="assets/screenshots/video.png" style="width: 30%;" />
+  <img src="assets/screenshots/video-1.png" style="width: 30%;" />
+  <img src="assets/screenshots/error.png" style="width: 30%;" />
 </div>
 
 ---
