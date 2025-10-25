@@ -14,7 +14,6 @@ class ToggleVideoEvent extends VideoEvent {
   ToggleVideoEvent(this.enabled);
 }
 
-
 class JoinChannel extends VideoEvent {
   final String channelName;
   JoinChannel(this.channelName);
@@ -37,4 +36,15 @@ class UpdateVideoState extends VideoEvent {}
 class VideoErrorEvent extends VideoEvent {
   final String error;
   VideoErrorEvent(this.error);
+}
+
+class StartScreenShare extends VideoEvent {}
+
+class StopScreenShare extends VideoEvent {}
+
+class ToggleScreenShare extends VideoEvent {}
+
+class ScreenShareStateChanged extends VideoEvent {
+  final bool isSharing;
+  ScreenShareStateChanged(this.isSharing);
 }

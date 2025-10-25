@@ -14,7 +14,7 @@ class NoDataWidget extends StatelessWidget {
     required this.icon,
     required this.message,
     this.iconSize = 40,
-    this.iconColor =  AppColors.primary,
+    this.iconColor = AppColors.primary,
     this.textStyle,
     this.onRetry,
   });
@@ -32,7 +32,8 @@ class NoDataWidget extends StatelessWidget {
             Text(
               message,
               textAlign: TextAlign.center,
-              style: textStyle ??
+              style:
+                  textStyle ??
                   Theme.of(context).textTheme.bodyMedium?.copyWith(
                     fontSize: 15,
                     fontWeight: FontWeight.w500,
@@ -45,9 +46,7 @@ class NoDataWidget extends StatelessWidget {
                 onPressed: onRetry,
                 icon: const Icon(Icons.refresh, size: 16),
                 label: const Text("Retry"),
-                style: TextButton.styleFrom(
-                  foregroundColor: AppColors.primary,
-                ),
+                style: TextButton.styleFrom(foregroundColor: AppColors.primary),
               ),
             ],
           ],

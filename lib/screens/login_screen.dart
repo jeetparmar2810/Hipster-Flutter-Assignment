@@ -28,10 +28,7 @@ class _LoginScreenState extends State<LoginScreen>
     if (_formKey.currentState!.validate()) {
       // Use context.read<AuthBloc>() to dispatch login event
       context.read<AuthBloc>().add(
-        LoginRequested(
-          _emailCtrl.text.trim(),
-          _passwordCtrl.text.trim(),
-        ),
+        LoginRequested(_emailCtrl.text.trim(), _passwordCtrl.text.trim()),
       );
     }
   }
@@ -95,8 +92,16 @@ class _LoginScreenState extends State<LoginScreen>
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                       colors: [
-                        Color.lerp(AppColors.primary, AppColors.primaryLight, t)!,
-                        Color.lerp(AppColors.primaryLight, AppColors.primary, t)!,
+                        Color.lerp(
+                          AppColors.primary,
+                          AppColors.primaryLight,
+                          t,
+                        )!,
+                        Color.lerp(
+                          AppColors.primaryLight,
+                          AppColors.primary,
+                          t,
+                        )!,
                       ],
                     ),
                   ),
@@ -144,7 +149,9 @@ class _LoginScreenState extends State<LoginScreen>
                           padding: const EdgeInsets.all(24),
                           width: 400,
                           decoration: BoxDecoration(
-                            color: AppColors.surfaceLight.withValues(alpha: 0.12),
+                            color: AppColors.surfaceLight.withValues(
+                              alpha: 0.12,
+                            ),
                             borderRadius: BorderRadius.circular(25),
                             border: Border.all(
                               color: Colors.white.withValues(alpha: 0.7),
@@ -195,7 +202,9 @@ class _LoginScreenState extends State<LoginScreen>
                                   width: double.infinity,
                                   child: ElevatedButton(
                                     style: ElevatedButton.styleFrom(
-                                      padding: const EdgeInsets.symmetric(vertical: 14),
+                                      padding: const EdgeInsets.symmetric(
+                                        vertical: 14,
+                                      ),
                                       shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(14),
                                       ),
@@ -216,12 +225,16 @@ class _LoginScreenState extends State<LoginScreen>
                                 TextButton(
                                   onPressed: () {
                                     Navigator.pushNamed(
-                                        context, AppStrings.usersRoute);
+                                      context,
+                                      AppStrings.usersRoute,
+                                    );
                                   },
                                   child: Text(
                                     AppStrings.viewUsers,
                                     style: TextStyle(
-                                      color: AppColors.textPrimary.withValues(alpha: 0.8),
+                                      color: AppColors.textPrimary.withValues(
+                                        alpha: 0.8,
+                                      ),
                                       fontWeight: FontWeight.w500,
                                     ),
                                   ),

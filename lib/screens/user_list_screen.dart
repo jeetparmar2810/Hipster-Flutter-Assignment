@@ -15,10 +15,12 @@ class UserListScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final double topPadding = MediaQuery.of(context).padding.top + kToolbarHeight;
+    final double topPadding =
+        MediaQuery.of(context).padding.top + kToolbarHeight;
 
     return BlocProvider(
-      create: (context) => UserBloc(context.read<UserRepository>())..add(FetchUsersEvent()),
+      create: (context) =>
+          UserBloc(context.read<UserRepository>())..add(FetchUsersEvent()),
       child: Scaffold(
         extendBodyBehindAppBar: true,
         appBar: AppBar(
@@ -33,11 +35,7 @@ class UserListScreen extends StatelessWidget {
         body: Container(
           decoration: const BoxDecoration(
             gradient: LinearGradient(
-              colors: [
-                Color(0xFF0E403F),
-                Color(0xFF1F7B78),
-                Color(0xFF00B7C2),
-              ],
+              colors: [Color(0xFF0E403F), Color(0xFF1F7B78), Color(0xFF00B7C2)],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
@@ -51,8 +49,10 @@ class UserListScreen extends StatelessWidget {
 
                 if (users.isEmpty) {
                   return Center(
-                    child: NoDataWidget(icon: Icons.group,
-                        message: AppStrings.userNotFound),
+                    child: NoDataWidget(
+                      icon: Icons.group,
+                      message: AppStrings.userNotFound,
+                    ),
                   );
                 }
 

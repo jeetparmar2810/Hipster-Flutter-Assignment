@@ -40,17 +40,10 @@ class AppColors {
   static LinearGradient overlayGradient = LinearGradient(
     begin: Alignment.bottomCenter,
     end: Alignment.topCenter,
-    colors: [
-      Colors.black.withValues(alpha: 0.8),
-      Colors.transparent,
-    ],
+    colors: [Colors.black.withValues(alpha: 0.8), Colors.transparent],
   );
   static const Color backgroundDark = Color(0xFF0E403F);
   static const Color textWhite = Colors.white;
   static const Color textMuted = Colors.white70;
-  static const List<Color> gradient = [
-    backgroundDark,
-    primaryDark,
-    primary,
-  ];
+  static const List<Color> gradient = [backgroundDark, primaryDark, primary];
 }

@@ -6,10 +6,7 @@ import '../utils/app_strings.dart';
 class UserTile extends StatelessWidget {
   final UserModel user;
 
-  const UserTile({
-    super.key,
-    required this.user,
-  });
+  const UserTile({super.key, required this.user});
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +37,10 @@ class UserTile extends StatelessWidget {
           ],
         ),
         child: ListTile(
-          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 16,
+            vertical: 8,
+          ),
           leading: Container(
             decoration: const BoxDecoration(
               shape: BoxShape.circle,
@@ -182,11 +182,23 @@ class _UserDetailSheet extends StatelessWidget {
                 const SizedBox(height: 24),
                 Divider(color: Colors.white.withValues(alpha: 0.25)),
                 const SizedBox(height: 24),
-                _infoTile(AppStrings.userId, user.id.toString(), Icons.badge_outlined),
+                _infoTile(
+                  AppStrings.userId,
+                  user.id.toString(),
+                  Icons.badge_outlined,
+                ),
                 const SizedBox(height: 16),
-                _infoTile(AppStrings.email, user.email, Icons.alternate_email_outlined),
+                _infoTile(
+                  AppStrings.email,
+                  user.email,
+                  Icons.alternate_email_outlined,
+                ),
                 const SizedBox(height: 16),
-                _infoTile(AppStrings.company, AppStrings.companyName, Icons.business_outlined),
+                _infoTile(
+                  AppStrings.company,
+                  AppStrings.companyName,
+                  Icons.business_outlined,
+                ),
               ],
             ),
           ),

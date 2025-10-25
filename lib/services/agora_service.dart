@@ -11,12 +11,14 @@ class AgoraService {
   int? remoteUid;
   bool isJoined = false;
   String? currentChannel;
+  bool isScreenSharing = false;
 
   Function(int uid)? onUserJoined;
   Function(int uid)? onUserLeft;
   Function()? onLocalUserJoined;
   Function(String error)? onError;
   Function()? onCallEnded;
+  Function(bool isSharing)? onScreenShareStateChanged;
 
   Future<void> initialize() async {
     Logger.i('Initializing Agora...');
@@ -34,10 +36,12 @@ class AgoraService {
 
       _engine = createAgoraRtcEngine();
 
-      await _engine!.initialize(RtcEngineContext(
-        appId: appId,
-        channelProfile: ChannelProfileType.channelProfileCommunication,
-      ));
+      await _engine!.initialize(
+        RtcEngineContext(
+          appId: appId,
+          channelProfile: ChannelProfileType.channelProfileCommunication,
+        ),
+      );
 
       Logger.i('Agora engine created');
 
@@ -67,7 +71,12 @@ class AgoraService {
           this.remoteUid = remoteUid;
           onUserJoined?.call(remoteUid);
         },
-        onUserOffline: (RtcConnection connection, int remoteUid, UserOfflineReasonType reason) {
+        onUserOffline:
+            (
+            RtcConnection connection,
+            int remoteUid,
+            UserOfflineReasonType reason,
+            ) {
           Logger.i('Remote user $remoteUid left (reason: $reason)');
 
           if (this.remoteUid == remoteUid) {
@@ -86,6 +95,7 @@ class AgoraService {
           isJoined = false;
           remoteUid = null;
           currentChannel = null;
+          isScreenSharing = false;
 
           onCallEnded?.call();
         },
@@ -93,8 +103,12 @@ class AgoraService {
           Logger.i('Agora Error: $err - $msg');
           onError?.call('Error $err: $msg');
         },
-        onConnectionStateChanged: (RtcConnection connection,
-            ConnectionStateType state, ConnectionChangedReasonType reason) {
+        onConnectionStateChanged:
+            (
+            RtcConnection connection,
+            ConnectionStateType state,
+            ConnectionChangedReasonType reason,
+            ) {
           Logger.i('Connection changed: $state (reason: $reason)');
 
           if (state == ConnectionStateType.connectionStateFailed ||
@@ -149,6 +163,11 @@ class AgoraService {
       return;
     }
     try {
+      // Stop screen sharing if active
+      if (isScreenSharing) {
+        await stopScreenShare();
+      }
+
       await _engine?.stopPreview();
       await _engine?.leaveChannel();
       Logger.i('Successfully left channel');
@@ -158,6 +177,7 @@ class AgoraService {
       isJoined = false;
       remoteUid = null;
       currentChannel = null;
+      isScreenSharing = false;
     }
   }
 
@@ -176,11 +196,106 @@ class AgoraService {
     Logger.i('Camera switched');
   }
 
+  Future<void> startScreenShare() async {
+    if (_engine == null) {
+      throw Exception('Engine not initialized');
+    }
+
+    try {
+      Logger.i('Starting screen share...');
+
+      // Stop camera track when starting screen share
+      await _engine!.muteLocalVideoStream(true);
+
+      // Start screen capture
+      await _engine!.startScreenCapture(
+        const ScreenCaptureParameters2(
+          captureAudio: true,
+          captureVideo: true,
+        ),
+      );
+
+      // Update channel media options to publish screen track
+      await _engine!.updateChannelMediaOptions(
+        const ChannelMediaOptions(
+          publishScreenTrack: true,
+          publishCameraTrack: false,
+          publishScreenCaptureAudio: true,
+          publishScreenCaptureVideo: true,
+        ),
+      );
+
+      isScreenSharing = true;
+      onScreenShareStateChanged?.call(true);
+      Logger.i('Screen share started successfully');
+    } catch (e) {
+      Logger.i('Failed to start screen share: $e');
+      onError?.call('Screen share failed: $e');
+      rethrow;
+    }
+  }
+
+  Future<void> stopScreenShare() async {
+    if (_engine == null || !isScreenSharing) {
+      return;
+    }
+
+    try {
+      Logger.i('Stopping screen share...');
+
+      // Stop screen capture
+      await _engine!.stopScreenCapture();
+
+      // Resume camera track
+      await _engine!.muteLocalVideoStream(false);
+
+      // Update channel media options to publish camera track
+      await _engine!.updateChannelMediaOptions(
+        const ChannelMediaOptions(
+          publishScreenTrack: false,
+          publishCameraTrack: true,
+          publishScreenCaptureAudio: false,
+          publishScreenCaptureVideo: false,
+        ),
+      );
+
+      isScreenSharing = false;
+      onScreenShareStateChanged?.call(false);
+      Logger.i('Screen share stopped successfully');
+    } catch (e) {
+      Logger.i('Failed to stop screen share: $e');
+      onError?.call('Stop screen share failed: $e');
+    }
+  }
+
+  Future<void> toggleScreenShare() async {
+    Logger.i('Toggling screen share. Current state: $isScreenSharing');
+    if (isScreenSharing) {
+      await stopScreenShare();
+    } else {
+      await startScreenShare();
+    }
+  }
+
   Widget getLocalVideoWidget() {
     if (_engine == null) {
       return const Center(child: CircularProgressIndicator());
     }
 
+    // When screen sharing, show screen capture
+    if (isScreenSharing) {
+      return AgoraVideoView(
+        controller: VideoViewController(
+          rtcEngine: _engine!,
+          canvas: const VideoCanvas(
+            uid: 0,
+            sourceType: VideoSourceType.videoSourceScreen,
+          ),
+        ),
+      );
+    }
+
+    // Normal camera view
     return AgoraVideoView(
       controller: VideoViewController(
         rtcEngine: _engine!,
@@ -211,6 +326,9 @@ class AgoraService {
   Future<void> dispose() async {
     Logger.i('Disposing Agora service...');
     try {
+      if (isScreenSharing) {
+        await stopScreenShare();
+      }
       await _engine?.stopPreview();
       if (isJoined) {
         await _engine?.leaveChannel();
@@ -224,6 +342,7 @@ class AgoraService {
       isJoined = false;
       remoteUid = null;
       currentChannel = null;
+      isScreenSharing = false;
     }
   }
 }

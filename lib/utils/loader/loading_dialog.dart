@@ -7,11 +7,10 @@ class LoadingDialog {
       context: context,
       barrierColor: Colors.black26,
       barrierDismissible: false,
-      builder: (_) => Center(
-        child: AppLoader(),
-      ),
+      builder: (_) => Center(child: AppLoader()),
     );
   }
+
   static void hide(BuildContext context) {
     if (Navigator.of(context, rootNavigator: true).canPop()) {
       Navigator.of(context, rootNavigator: true).pop();

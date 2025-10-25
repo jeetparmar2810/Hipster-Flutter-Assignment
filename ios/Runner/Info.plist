@@ -57,6 +57,7 @@
     	<key>UIApplicationSupportsIndirectInputEvents</key>
     	<true/>
 
-
+<key>RTCAppGroupIdentifier</key>
+<string>group.com.examp.hipster_inc_assignment.screenshare</string>
 </dict>
 </plist>

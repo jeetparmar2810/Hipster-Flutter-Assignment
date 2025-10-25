@@ -1,6 +1,6 @@
 class AppStrings {
   static const String appName = 'Video Call App';
-  static const String appLogo = "assets/logo.png";
+  static const String appLogo = "assets/app_icon.png";
 
   static const String welcomeBack = "Welcome Back";
   static const String signInSubtitle = "Sign in to continue your journey";
@@ -43,7 +43,8 @@ class AppStrings {
   static const String waitingForOthers = 'Waiting for others to join...';
   static const String connectedTo = 'Connected to: ';
   static const String readyToStart = 'Ready to start a call';
-  static const String sameChannelNote = 'Both users must use the same channel name';
+  static const String sameChannelNote =
+      'Both users must use the same channel name';
 
   // Call Controls
   static const String mute = 'Mute';
@@ -86,7 +87,6 @@ class AppStrings {
   static const String yes = 'Yes';
   static const String no = 'No';
 
-
   static const String invalidCredentials = 'Invalid credentials';
   static const String loginFailed = 'Login failed';
   static const String viewUsersButton = 'View Users';
@@ -111,7 +111,7 @@ class AppStrings {
   static const String videoCallRoute = '/video-call';
 
   static const String videoInitFailed = 'Initialization failed';
-  static const String imageIcon = 'assets/logo.png';
+  static const String imageIcon = 'assets/app_icon.png';
 
   static const String noNetwork = "No network and no cached data found";
 

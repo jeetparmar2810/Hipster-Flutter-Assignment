@@ -1,9 +1,9 @@
 import 'package:dio/dio.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:hipster_inc_assignment/utils/app_strings.dart';
 import 'package:hipster_inc_assignment/utils/logger.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import '../models/user_model.dart';
-import '../utils/constants.dart';
 
 class UserRepository {
   final Dio _dio = Dio(
@@ -16,10 +16,17 @@ class UserRepository {
 
   Future<List<UserModel>> fetchUsers() async {
     Box? box;
+    final String apiUrl = dotenv.env['API_URL'] ?? '';
+    final String apiKey = dotenv.env['API_KEY'] ?? '';
 
     try {
       box = await Hive.openBox('usersBox');
-      final response = await _dio.get(AppConstants.apiUrl);
+      final response = await _dio.get(apiUrl,
+        options: Options(
+          headers: {
+            'x-api-key': apiKey,
+          },
+        ),);
       if (response.statusCode != 200) {
         throw DioException(
           requestOptions: response.requestOptions,
@@ -45,7 +52,6 @@ class UserRepository {
       Logger.i('Cached ${users.length} users in Hive');
 
       return users;
-
     } on DioException catch (e) {
       Logger.i('DioException: ${e.type}');
       Logger.i('Message: ${e.message}');
@@ -85,7 +91,6 @@ class UserRepository {
       Logger.i('Loaded ${users.length} users from cache');
 
       return users;
-
     } catch (e) {
       Logger.i('Failed to load from cache: $e');
       throw Exception(AppStrings.noNetwork);
