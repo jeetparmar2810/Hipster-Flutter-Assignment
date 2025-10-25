@@ -107,8 +107,8 @@ flutter run
 <div align="center">
   <img src="assets/screenshots/splash.png" width="28%" />
   <img src="assets/screenshots/login.png" width="28%" />
-  <img src="assets/screenshots/user_list.png" width="28%" />
-  <img src="assets/screenshots/video_call.png" width="28%" />
+  <img src="assets/screenshots/users.png" width="28%" />
+  <img src="assets/screenshots/userDetails.png" width="28%" />
 </div>
 
 ---
