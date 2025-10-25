@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../blocs/auth/auth_bloc.dart';
 import '../screens/login_screen.dart';
 import '../screens/user_list_screen.dart';
 import '../screens/video_call_screen.dart';
@@ -13,20 +15,30 @@ class AppRoutes {
     switch (settings.name) {
       case login:
         return MaterialPageRoute(
-          builder: (_) => const LoginScreen(),
+          builder: (context) => BlocProvider.value(
+            value: context.read<AuthBloc>(),
+            child: const LoginScreen(),
+          ),
         );
 
       case users:
         return MaterialPageRoute(
-          builder: (_) => const UserListScreen(),
+          builder: (context) => BlocProvider.value(
+            value: context.read<AuthBloc>(),
+            child: const UserListScreen(),
+          ),
         );
 
       case videoCall:
         final args = settings.arguments as Map<String, dynamic>?;
         final channelName = args?[AppStrings.channelNameArg] as String?;
         return MaterialPageRoute(
-          builder: (_) => VideoCallScreen(channelName: channelName),
+          builder: (context) => BlocProvider.value(
+            value: context.read<AuthBloc>(),
+            child: VideoCallScreen(channelName: channelName),
+          ),
         );
+
       default:
         return _errorRoute(settings.name);
     }
