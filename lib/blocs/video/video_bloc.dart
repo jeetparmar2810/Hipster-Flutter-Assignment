@@ -40,10 +40,6 @@ class VideoBloc extends Bloc<VideoEvent, VideoState> {
     };
   }
 
-  // ───────────────────────────────────────────────
-  // EVENT HANDLERS
-  // ───────────────────────────────────────────────
-
   Future<void> _onInitVideo(InitVideo event, Emitter<VideoState> emit) async {
     Logger.i('Bloc: Initializing video...');
     emit(VideoLoading());
@@ -109,9 +105,6 @@ class VideoBloc extends Bloc<VideoEvent, VideoState> {
     emit(VideoError(event.error));
   }
 
-  // ───────────────────────────────────────────────
-  // HELPER METHOD
-  // ───────────────────────────────────────────────
   void _emitReadyState(Emitter<VideoState> emit) {
     emit(VideoReady(
       localVideoWidget: _agoraService.getLocalVideoWidget(),

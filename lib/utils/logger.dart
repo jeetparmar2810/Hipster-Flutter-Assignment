@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 
 class Logger {
-  static const String _tag = '📱 AppLog';
+  static const String _tag = 'AppLog';
 
   static void i(String message) {
     if (kDebugMode) {

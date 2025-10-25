@@ -132,7 +132,6 @@ class _UserDetailSheet extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                // Grip bar
                 Container(
                   width: 40,
                   height: 5,
@@ -142,8 +141,6 @@ class _UserDetailSheet extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 24),
-
-                // Avatar with gradient ring
                 Container(
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
@@ -164,10 +161,7 @@ class _UserDetailSheet extends StatelessWidget {
                     backgroundImage: NetworkImage(user.avatar),
                   ),
                 ),
-
                 const SizedBox(height: 20),
-
-                // Name
                 Text(
                   '${user.firstName} ${user.lastName}',
                   style: const TextStyle(
@@ -176,10 +170,7 @@ class _UserDetailSheet extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-
                 const SizedBox(height: 8),
-
-                // Email
                 Text(
                   user.email,
                   style: TextStyle(
@@ -191,8 +182,6 @@ class _UserDetailSheet extends StatelessWidget {
                 const SizedBox(height: 24),
                 Divider(color: Colors.white.withValues(alpha: 0.25)),
                 const SizedBox(height: 24),
-
-                // Info Tiles
                 _infoTile(AppStrings.userId, user.id.toString(), Icons.badge_outlined),
                 const SizedBox(height: 16),
                 _infoTile(AppStrings.email, user.email, Icons.alternate_email_outlined),

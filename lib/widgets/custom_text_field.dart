@@ -36,7 +36,6 @@ class _AppTextFieldState extends State<AppTextField> {
     _focusNode.addListener(() {
       setState(() => _isFocused = _focusNode.hasFocus);
     });
-
     _isPasswordVisible = !widget.obscureText;
   }
 
@@ -78,7 +77,6 @@ class _AppTextFieldState extends State<AppTextField> {
         obscureText: isPasswordField ? !_isPasswordVisible : false,
         validator: (value) {
           final error = widget.validator?.call(value);
-          // Update error state for UI changes
           WidgetsBinding.instance.addPostFrameCallback((_) {
             if (mounted) {
               setState(() {
@@ -89,7 +87,7 @@ class _AppTextFieldState extends State<AppTextField> {
           return error;
         },
         style: const TextStyle(
-          color: Colors.white, // Pure white text
+          color: Colors.white,
           fontSize: 16,
           fontWeight: FontWeight.w400,
         ),
@@ -99,16 +97,12 @@ class _AppTextFieldState extends State<AppTextField> {
           fillColor: AppColors.surfaceLight.withValues(alpha: 0.1),
           contentPadding:
           const EdgeInsets.symmetric(vertical: 16, horizontal: 14),
-
-          // Hint - Always visible inside the field
           hintText: widget.label,
           hintStyle: TextStyle(
             color: Colors.white.withValues(alpha: 0.6),
             fontSize: 16,
             fontWeight: FontWeight.w400,
           ),
-
-          // Prefix icon - Pure white
           prefixIcon: widget.prefixIcon != null
               ? Icon(
             widget.prefixIcon,
@@ -120,8 +114,6 @@ class _AppTextFieldState extends State<AppTextField> {
             size: 22,
           )
               : null,
-
-          // Password visibility toggle
           suffixIcon: isPasswordField
               ? GestureDetector(
             onTap: _togglePasswordVisibility,
@@ -149,8 +141,6 @@ class _AppTextFieldState extends State<AppTextField> {
             ),
           )
               : null,
-
-          // Borders
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(14),
             borderSide: BorderSide(
@@ -179,8 +169,6 @@ class _AppTextFieldState extends State<AppTextField> {
               width: 1.6,
             ),
           ),
-
-          // Error text style
           errorStyle: TextStyle(
             color: AppColors.error.withValues(alpha: 0.9),
             fontSize: 13,

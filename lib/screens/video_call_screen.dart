@@ -135,7 +135,7 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
             ),
             leading: IconButton(
               icon: const Icon(Icons.arrow_back, color: AppColors.textWhite),
-              onPressed: _endCall, // Handle back arrow
+              onPressed: _endCall,
             ),
           ),
           body: Container(
@@ -403,7 +403,9 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
             onPressed: _joinChannel,
             child: const Text(
               AppStrings.joinButton,
-              style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
+              style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.w600, fontSize: 16),
             ),
           ),
         ),

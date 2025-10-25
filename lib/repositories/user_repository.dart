@@ -39,7 +39,6 @@ class UserRepository {
 
       Logger.i('Fetched ${users.length} users from API');
 
-      // Cache users in Hive
       await box.clear();
       await box.addAll(users.map((e) => e.toJson()));
 
@@ -48,7 +47,6 @@ class UserRepository {
       return users;
 
     } on DioException catch (e) {
-      // Handle Dio-specific errors
       Logger.i('DioException: ${e.type}');
       Logger.i('Message: ${e.message}');
 
@@ -61,11 +59,8 @@ class UserRepository {
       } else if (e.type == DioExceptionType.badResponse) {
         Logger.i('Bad response: ${e.response?.statusCode}');
       }
-
       return _loadFromCache(box);
-
     } catch (e, stackTrace) {
-      // Handle other errors
       Logger.i('Unexpected error: $e');
       Logger.i('Stack trace: $stackTrace');
 
@@ -75,7 +70,6 @@ class UserRepository {
 
   Future<List<UserModel>> _loadFromCache(Box? box) async {
     try {
-      // Ensure box is opened
       box ??= await Hive.openBox('usersBox');
 
       if (box.isEmpty) {

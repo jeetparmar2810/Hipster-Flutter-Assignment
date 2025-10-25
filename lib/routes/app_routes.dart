@@ -38,7 +38,7 @@ class AppRoutes {
         backgroundColor: Colors.black,
         body: Center(
           child: Text(
-            '🚫 No route defined for "$name"',
+            'No route defined for "$name"',
             style: const TextStyle(color: Colors.white, fontSize: 18),
             textAlign: TextAlign.center,
           ),

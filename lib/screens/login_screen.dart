@@ -82,7 +82,6 @@ class _LoginScreenState extends State<LoginScreen>
         resizeToAvoidBottomInset: true,
         body: Stack(
           children: [
-            /// 🔷 Animated gradient background
             AnimatedBuilder(
               animation: _animationController,
               builder: (context, _) {
@@ -101,20 +100,15 @@ class _LoginScreenState extends State<LoginScreen>
                 );
               },
             ),
-
-            /// 🔶 Frosted overlay
             Container(
               color: Colors.white.withValues(alpha: 0.05),
             ),
-
-            /// 🪞 Main content
             Center(
               child: SingleChildScrollView(
                 padding: const EdgeInsets.symmetric(horizontal: 24),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    // Logo
                     Hero(
                       tag: 'app_logo',
                       child: Image.asset(
@@ -124,7 +118,6 @@ class _LoginScreenState extends State<LoginScreen>
                       ),
                     ),
                     const SizedBox(height: 20),
-
                     const Text(
                       AppStrings.welcomeBack,
                       style: TextStyle(
@@ -143,8 +136,6 @@ class _LoginScreenState extends State<LoginScreen>
                       ),
                     ),
                     const SizedBox(height: 40),
-
-                    /// Glass form card
                     ClipRRect(
                       borderRadius: BorderRadius.circular(25),
                       child: BackdropFilter(
@@ -200,8 +191,6 @@ class _LoginScreenState extends State<LoginScreen>
                                   },
                                 ),
                                 const SizedBox(height: 32),
-
-                                /// 🌈 Gradient Login Button
                                 SizedBox(
                                   width: double.infinity,
                                   child: DecoratedBox(
@@ -243,8 +232,6 @@ class _LoginScreenState extends State<LoginScreen>
                                   ),
                                 ),
                                 const SizedBox(height: 16),
-
-                                /// View Users
                                 TextButton(
                                   onPressed: () {
                                     Navigator.pushNamed(
