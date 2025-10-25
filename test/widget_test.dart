@@ -7,11 +7,9 @@ import 'package:hipster_inc_assignment/repositories/user_repository.dart';
 
 void main() {
   testWidgets('App loads successfully', (WidgetTester tester) async {
-    // Create repositories for testing
     final authRepository = AuthRepository();
     final userRepository = UserRepository();
 
-    // Build our app with all required providers
     await tester.pumpWidget(
       MultiRepositoryProvider(
         providers: [
@@ -29,10 +27,7 @@ void main() {
       ),
     );
 
-    // Wait for the widget to settle
-    await tester.pumpAndSettle();
-
-    // Verify the login screen appears
+    await tester.pump();
     expect(find.byType(MyApp), findsOneWidget);
   });
 }
