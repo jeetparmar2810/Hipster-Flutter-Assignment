@@ -8,6 +8,7 @@ import '../services/agora_service.dart';
 import '../utils/app_loader.dart';
 import '../utils/app_colors.dart';
 import '../utils/app_strings.dart';
+import '../utils/logger.dart';
 
 class VideoCallScreen extends StatefulWidget {
   final String? channelName;
@@ -26,6 +27,7 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
   bool videoEnabled = true;
   bool _loading = false;
   String? _currentChannel;
+  bool _isCallEnded = false;
 
   final TextEditingController _channelController = TextEditingController();
 
@@ -35,16 +37,31 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
     _service = AgoraService();
     _videoBloc = VideoBloc(_service)..add(InitVideo());
 
+    _setupCallEndCallback();
+
     if (widget.channelName != null) {
       _currentChannel = widget.channelName;
       _channelController.text = widget.channelName!;
     }
   }
 
+  void _setupCallEndCallback() {
+    _service.onCallEnded = () {
+      Logger.i('Call ended callback triggered - remote user left or connection lost');
+      if (mounted && !_isCallEnded) {
+        _isCallEnded = true;
+        _endCall(isRemoteInitiated: true);
+      }
+    };
+  }
+
   @override
   void dispose() {
+    if (!_isCallEnded) {
+      _service.leaveChannel();
+      _service.dispose();
+    }
     _videoBloc.close();
-    _service.dispose();
     _channelController.dispose();
     super.dispose();
   }
@@ -93,14 +110,45 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
     }
   }
 
-  Future<void> _endCall() async {
+  Future<void> _endCall({bool isRemoteInitiated = false}) async {
+    if (_isCallEnded) {
+      Logger.i('End call already in progress, skipping...');
+      return;
+    }
+
+    _isCallEnded = true;
+
     try {
-      _videoBloc.add(LeaveChannel());
+      Logger.i('Ending call... (remote initiated: $isRemoteInitiated)');
+
+      if (!isRemoteInitiated) {
+        _videoBloc.add(LeaveChannel());
+        await _service.leaveChannel();
+      }
+
       await _service.dispose();
+
+      Logger.i('Call ended successfully');
     } catch (e) {
+      Logger.i('Error ending call: $e');
       debugPrint('Error ending call: $e');
     }
+
     if (!mounted) return;
+
+    if (isRemoteInitiated) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Call ended by other participant'),
+          duration: Duration(seconds: 2),
+          backgroundColor: AppColors.error,
+        ),
+      );
+      await Future.delayed(const Duration(milliseconds: 500));
+    }
+
+    if (!mounted) return;
+
     if (Navigator.canPop(context)) {
       Navigator.pop(context);
     } else {
@@ -108,6 +156,47 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
     }
   }
 
+  Future<void> _showEndCallDialog() async {
+    if (_isCallEnded) return;
+
+    final shouldEnd = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: AppColors.backgroundDark,
+        title: const Text(
+          'End Call?',
+          style: TextStyle(color: AppColors.textWhite),
+        ),
+        content: const Text(
+          'Are you sure you want to end this call?',
+          style: TextStyle(color: AppColors.textMuted),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text(
+              'Cancel',
+              style: TextStyle(color: AppColors.textMuted),
+            ),
+          ),
+          ElevatedButton(
+            onPressed: () => Navigator.pop(context, true),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.error,
+            ),
+            child: const Text(
+              'End Call',
+              style: TextStyle(color: AppColors.textWhite),
+            ),
+          ),
+        ],
+      ),
+    );
+
+    if (shouldEnd == true && mounted && !_isCallEnded) {
+      await _endCall(isRemoteInitiated: false);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -116,8 +205,8 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
       child: PopScope(
         canPop: false,
         onPopInvokedWithResult: (didPop, result) async {
-          if (!didPop) {
-            await _endCall();
+          if (!didPop && !_isCallEnded) {
+            await _showEndCallDialog();
           }
         },
         child: Scaffold(
@@ -135,7 +224,7 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
             ),
             leading: IconButton(
               icon: const Icon(Icons.arrow_back, color: AppColors.textWhite),
-              onPressed: _endCall,
+              onPressed: _showEndCallDialog,
             ),
           ),
           body: Container(
@@ -339,7 +428,7 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
               ),
               const SizedBox(width: 14),
               GestureDetector(
-                onTap: _endCall,
+                onTap: _showEndCallDialog,
                 child: const CircleAvatar(
                   radius: 26,
                   backgroundColor: AppColors.error,

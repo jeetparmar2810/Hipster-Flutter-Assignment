@@ -12,11 +12,11 @@ class AgoraService {
   bool isJoined = false;
   String? currentChannel;
 
-
   Function(int uid)? onUserJoined;
   Function(int uid)? onUserLeft;
   Function()? onLocalUserJoined;
   Function(String error)? onError;
+  Function()? onCallEnded;
 
   Future<void> initialize() async {
     Logger.i('Initializing Agora...');
@@ -34,7 +34,7 @@ class AgoraService {
 
       _engine = createAgoraRtcEngine();
 
-      await _engine!.initialize( RtcEngineContext(
+      await _engine!.initialize(RtcEngineContext(
         appId: appId,
         channelProfile: ChannelProfileType.channelProfileCommunication,
       ));
@@ -69,21 +69,43 @@ class AgoraService {
         },
         onUserOffline: (RtcConnection connection, int remoteUid, UserOfflineReasonType reason) {
           Logger.i('Remote user $remoteUid left (reason: $reason)');
-          if (this.remoteUid == remoteUid) this.remoteUid = null;
-          onUserLeft?.call(remoteUid);
+
+          if (this.remoteUid == remoteUid) {
+            this.remoteUid = null;
+            onUserLeft?.call(remoteUid);
+
+            if (reason == UserOfflineReasonType.userOfflineQuit ||
+                reason == UserOfflineReasonType.userOfflineDropped) {
+              Logger.i('Call ended because remote user left');
+              onCallEnded?.call();
+            }
+          }
         },
         onLeaveChannel: (RtcConnection connection, RtcStats stats) {
           Logger.i('Left channel');
           isJoined = false;
           remoteUid = null;
           currentChannel = null;
+
+          onCallEnded?.call();
         },
         onError: (ErrorCodeType err, String msg) {
           Logger.i('Agora Error: $err - $msg');
           onError?.call('Error $err: $msg');
         },
-        onConnectionStateChanged: (RtcConnection connection, ConnectionStateType state, ConnectionChangedReasonType reason) {
+        onConnectionStateChanged: (RtcConnection connection,
+            ConnectionStateType state, ConnectionChangedReasonType reason) {
           Logger.i('Connection changed: $state (reason: $reason)');
+
+          if (state == ConnectionStateType.connectionStateFailed ||
+              state == ConnectionStateType.connectionStateDisconnected) {
+            Logger.i('Connection lost, ending call');
+            onCallEnded?.call();
+          }
+        },
+        onConnectionLost: (RtcConnection connection) {
+          Logger.i('Connection lost completely');
+          onCallEnded?.call();
         },
       ),
     );
@@ -111,7 +133,6 @@ class AgoraService {
           autoSubscribeVideo: true,
         ),
       );
-
       Logger.i('Join channel request sent');
     } catch (e) {
       Logger.i('Failed to join channel: $e');
@@ -122,14 +143,22 @@ class AgoraService {
 
   Future<void> leaveChannel() async {
     Logger.i('Leaving channel...');
+
+    if (!isJoined) {
+      Logger.i('Not in a channel, skipping leave');
+      return;
+    }
     try {
+      await _engine?.stopPreview();
       await _engine?.leaveChannel();
+      Logger.i('Successfully left channel');
     } catch (e) {
       Logger.i('Error while leaving channel: $e');
+    } finally {
+      isJoined = false;
+      remoteUid = null;
+      currentChannel = null;
     }
-    isJoined = false;
-    remoteUid = null;
-    currentChannel = null;
   }
 
   Future<void> toggleAudio(bool enabled) async {
@@ -182,14 +211,19 @@ class AgoraService {
   Future<void> dispose() async {
     Logger.i('Disposing Agora service...');
     try {
-      await _engine?.leaveChannel();
+      await _engine?.stopPreview();
+      if (isJoined) {
+        await _engine?.leaveChannel();
+      }
       await _engine?.release();
+      Logger.i('Agora service disposed successfully');
     } catch (e) {
       Logger.i('Error during dispose: $e');
+    } finally {
+      _engine = null;
+      isJoined = false;
+      remoteUid = null;
+      currentChannel = null;
     }
-    _engine = null;
-    isJoined = false;
-    remoteUid = null;
-    currentChannel = null;
   }
 }
