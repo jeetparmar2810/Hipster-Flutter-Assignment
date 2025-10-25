@@ -131,7 +131,7 @@ class _LoginScreenState extends State<LoginScreen>
                     Text(
                       AppStrings.signInSubtitle,
                       style: TextStyle(
-                        color: AppColors.textPrimary..withValues(alpha: 0.8),
+                        color: AppColors.textPrimary.withValues(alpha: 0.8),
                         fontSize: 16,
                       ),
                     ),
@@ -144,10 +144,10 @@ class _LoginScreenState extends State<LoginScreen>
                           padding: const EdgeInsets.all(24),
                           width: 400,
                           decoration: BoxDecoration(
-                            color: AppColors.surfaceLight..withValues(alpha: 0.12),
+                            color: AppColors.surfaceLight.withValues(alpha: 0.12),
                             borderRadius: BorderRadius.circular(25),
                             border: Border.all(
-                              color: Colors.white..withValues(alpha: 0.7),
+                              color: Colors.white.withValues(alpha: 0.7),
                             ),
                             boxShadow: const [
                               BoxShadow(
@@ -221,7 +221,7 @@ class _LoginScreenState extends State<LoginScreen>
                                   child: Text(
                                     AppStrings.viewUsers,
                                     style: TextStyle(
-                                      color: AppColors.textPrimary..withValues(alpha: 0.8),
+                                      color: AppColors.textPrimary.withValues(alpha: 0.8),
                                       fontWeight: FontWeight.w500,
                                     ),
                                   ),
