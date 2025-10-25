@@ -26,6 +26,7 @@ class _LoginScreenState extends State<LoginScreen>
 
   void _onLogin() {
     if (_formKey.currentState!.validate()) {
+      // Use context.read<AuthBloc>() to dispatch login event
       context.read<AuthBloc>().add(
         LoginRequested(
           _emailCtrl.text.trim(),
@@ -54,8 +55,9 @@ class _LoginScreenState extends State<LoginScreen>
 
   @override
   Widget build(BuildContext context) {
+    // Wrap Scaffold in BlocListener to handle login states
     return BlocListener<AuthBloc, AuthState>(
-      listener: (context, state) async {
+      listener: (context, state) {
         if (state is AuthLoading) {
           LoadingDialog.show(context);
         } else {
@@ -82,6 +84,7 @@ class _LoginScreenState extends State<LoginScreen>
         resizeToAvoidBottomInset: true,
         body: Stack(
           children: [
+            // Background gradient animation
             AnimatedBuilder(
               animation: _animationController,
               builder: (context, _) {
@@ -100,9 +103,7 @@ class _LoginScreenState extends State<LoginScreen>
                 );
               },
             ),
-            Container(
-              color: Colors.white.withValues(alpha: 0.05),
-            ),
+            Container(color: Colors.white.withOpacity(0.05)),
             Center(
               child: SingleChildScrollView(
                 padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -124,14 +125,13 @@ class _LoginScreenState extends State<LoginScreen>
                         color: AppColors.textPrimary,
                         fontSize: 28,
                         fontWeight: FontWeight.bold,
-                        letterSpacing: 0.5,
                       ),
                     ),
                     const SizedBox(height: 6),
                     Text(
                       AppStrings.signInSubtitle,
                       style: TextStyle(
-                        color: AppColors.textPrimary.withValues(alpha: 0.8),
+                        color: AppColors.textPrimary.withOpacity(0.8),
                         fontSize: 16,
                       ),
                     ),
@@ -144,10 +144,10 @@ class _LoginScreenState extends State<LoginScreen>
                           padding: const EdgeInsets.all(24),
                           width: 400,
                           decoration: BoxDecoration(
-                            color: AppColors.surfaceLight.withValues(alpha: 0.12),
+                            color: AppColors.surfaceLight.withOpacity(0.12),
                             borderRadius: BorderRadius.circular(25),
                             border: Border.all(
-                              color: Colors.white.withValues(alpha: 0.7),
+                              color: Colors.white.withOpacity(0.7),
                             ),
                             boxShadow: const [
                               BoxShadow(
@@ -193,40 +193,21 @@ class _LoginScreenState extends State<LoginScreen>
                                 const SizedBox(height: 32),
                                 SizedBox(
                                   width: double.infinity,
-                                  child: DecoratedBox(
-                                    decoration: const BoxDecoration(
-                                      gradient: LinearGradient(
-                                        colors: [
-                                          AppColors.primary,
-                                          AppColors.primaryLight,
-                                        ],
-                                        begin: Alignment.centerLeft,
-                                        end: Alignment.centerRight,
+                                  child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      padding: const EdgeInsets.symmetric(vertical: 14),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(14),
                                       ),
-                                      borderRadius: BorderRadius.all(
-                                        Radius.circular(14),
-                                      ),
+                                      backgroundColor: AppColors.primary,
                                     ),
-                                    child: ElevatedButton(
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor: Colors.transparent,
-                                        shadowColor: Colors.transparent,
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                          BorderRadius.circular(14),
-                                        ),
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 14),
-                                      ),
-                                      onPressed: _onLogin,
-                                      child: const Text(
-                                        AppStrings.loginButton,
-                                        style: TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.w600,
-                                          color: Colors.white,
-                                          letterSpacing: 1,
-                                        ),
+                                    onPressed: _onLogin,
+                                    child: const Text(
+                                      AppStrings.loginButton,
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.white,
                                       ),
                                     ),
                                   ),
@@ -240,8 +221,7 @@ class _LoginScreenState extends State<LoginScreen>
                                   child: Text(
                                     AppStrings.viewUsers,
                                     style: TextStyle(
-                                      color: AppColors.textPrimary
-                                          .withValues(alpha: 0.8),
+                                      color: AppColors.textPrimary.withOpacity(0.8),
                                       fontWeight: FontWeight.w500,
                                     ),
                                   ),

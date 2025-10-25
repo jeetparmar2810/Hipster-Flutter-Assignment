@@ -21,7 +21,7 @@ void main() async {
       ],
       child: MultiBlocProvider(
         providers: [
-          BlocProvider(
+          BlocProvider<AuthBloc>(
             create: (context) => AuthBloc(context.read<AuthRepository>()),
           ),
         ],
