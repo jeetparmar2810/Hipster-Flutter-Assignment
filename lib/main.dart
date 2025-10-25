@@ -13,16 +13,19 @@ void main() async {
   await Hive.initFlutter();
   await dotenv.load(fileName: ".env");
 
+  final authRepository = AuthRepository();
+  final userRepository = UserRepository();
+
   runApp(
     MultiRepositoryProvider(
       providers: [
-        RepositoryProvider(create: (_) => AuthRepository()),
-        RepositoryProvider(create: (_) => UserRepository()),
+        RepositoryProvider.value(value: authRepository),
+        RepositoryProvider.value(value: userRepository),
       ],
       child: MultiBlocProvider(
         providers: [
           BlocProvider<AuthBloc>(
-            create: (context) => AuthBloc(context.read<AuthRepository>()),
+            create: (context) => AuthBloc(authRepository),
           ),
         ],
         child: const MyApp(),
