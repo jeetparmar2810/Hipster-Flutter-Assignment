@@ -84,23 +84,26 @@ class _AppTextFieldState extends State<AppTextField> {
           contentPadding:
           const EdgeInsets.symmetric(vertical: 16, horizontal: 14),
 
-          // Label + Hint
+          // Label
           labelText: widget.label,
           labelStyle: TextStyle(
             color: _isFocused
                 ? AppColors.primaryLight
                 : Colors.white.withValues(alpha: 0.7),
           ),
-          hintText: widget.label,
-          hintStyle: TextStyle(
-            color: Colors.white.withValues(alpha: 0.5),
-          ),
           floatingLabelBehavior: FloatingLabelBehavior.auto,
 
-          // Prefix / Suffix Icons
+          // Prefix icon
           prefixIcon: widget.prefixIcon != null
-              ? Icon(widget.prefixIcon, color: Colors.white)
+              ? Icon(
+            widget.prefixIcon,
+            color: _isFocused
+                ? AppColors.primaryLight
+                : Colors.white.withValues(alpha: 0.8),
+          )
               : null,
+
+          // Password visibility toggle
           suffixIcon: isPasswordField
               ? GestureDetector(
             onTap: _togglePasswordVisibility,
@@ -109,8 +112,7 @@ class _AppTextFieldState extends State<AppTextField> {
               transitionBuilder:
                   (Widget child, Animation<double> animation) {
                 return RotationTransition(
-                  turns:
-                  Tween(begin: 0.75, end: 1.0).animate(animation),
+                  turns: Tween(begin: 0.75, end: 1.0).animate(animation),
                   child:
                   FadeTransition(opacity: animation, child: child),
                 );
@@ -120,7 +122,9 @@ class _AppTextFieldState extends State<AppTextField> {
                     ? Icons.visibility
                     : Icons.visibility_off,
                 key: ValueKey<bool>(_isPasswordVisible),
-                color: Colors.white,
+                color: _isFocused
+                    ? AppColors.primaryLight
+                    : Colors.white.withValues(alpha: 0.8),
               ),
             ),
           )
@@ -147,6 +151,19 @@ class _AppTextFieldState extends State<AppTextField> {
               color: AppColors.error,
               width: 1.2,
             ),
+          ),
+          focusedErrorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(14),
+            borderSide: BorderSide(
+              color: AppColors.error,
+              width: 1.6,
+            ),
+          ),
+
+          // Error text style
+          errorStyle: TextStyle(
+            color: AppColors.error.withValues(alpha: 0.9),
+            fontSize: 13,
           ),
         ),
       ),

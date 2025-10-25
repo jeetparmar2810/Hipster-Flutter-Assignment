@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hipster_inc_assignment/routes/app_routes.dart';
 import '../blocs/video/video_bloc.dart';
 import '../blocs/video/video_event.dart';
 import '../blocs/video/video_state.dart';
@@ -100,56 +101,73 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
       debugPrint('Error ending call: $e');
     }
     if (!mounted) return;
-    Navigator.of(context).maybePop();
+    if (Navigator.canPop(context)) {
+      Navigator.pop(context);
+    } else {
+      AppRoutes.navigateToUsers(context);
+    }
   }
+
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider.value(
       value: _videoBloc,
-      child: Scaffold(
-        extendBodyBehindAppBar: true,
-        appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          centerTitle: true,
-          title: const Text(
-            AppStrings.videoCallTitle,
-            style: TextStyle(
-              color: AppColors.textWhite,
-              fontWeight: FontWeight.w600,
+      child: PopScope(
+        canPop: false,
+        onPopInvokedWithResult: (didPop, result) async {
+          if (!didPop) {
+            await _endCall();
+          }
+        },
+        child: Scaffold(
+          extendBodyBehindAppBar: true,
+          appBar: AppBar(
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+            centerTitle: true,
+            title: const Text(
+              AppStrings.videoCallTitle,
+              style: TextStyle(
+                color: AppColors.textWhite,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back, color: AppColors.textWhite),
+              onPressed: _endCall, // Handle back arrow
             ),
           ),
-        ),
-        body: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: AppColors.gradient,
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
+          body: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: AppColors.gradient,
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
             ),
-          ),
-          child: SafeArea(
-            child: Column(
-              children: [
-                Expanded(
-                  child: BlocBuilder<VideoBloc, VideoState>(
-                    builder: (context, state) {
-                      if (state is VideoLoading) {
-                        return const Center(child: AppLoader());
-                      }
-                      if (state is VideoError) {
-                        return _buildErrorState(state.message);
-                      }
-                      if (state is VideoReady) {
-                        return _buildVideoLayout(state);
-                      }
-                      return const SizedBox();
-                    },
+            child: SafeArea(
+              child: Column(
+                children: [
+                  Expanded(
+                    child: BlocBuilder<VideoBloc, VideoState>(
+                      builder: (context, state) {
+                        if (state is VideoLoading) {
+                          return const Center(child: AppLoader());
+                        }
+                        if (state is VideoError) {
+                          return _buildErrorState(state.message);
+                        }
+                        if (state is VideoReady) {
+                          return _buildVideoLayout(state);
+                        }
+                        return const SizedBox();
+                      },
+                    ),
                   ),
-                ),
-                _buildControls(context),
-              ],
+                  _buildControls(context),
+                ],
+              ),
             ),
           ),
         ),
