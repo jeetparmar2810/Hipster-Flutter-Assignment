@@ -104,10 +104,11 @@ flutter run
 ## 🖼️ Screenshots
 
 <div align="center">
-  <img src="assets/screenshots/splash.png" width="25%" />
-  <img src="assets/screenshots/login.png" width="25%" />
-  <img src="assets/screenshots/users.png" width="25%" />
-  <img src="assets/screenshots/userDetails.png" width="25%" />
+<img src="assets/screenshots/splash.png" width="24%" />
+<img src="assets/screenshots/login.png" width="24%" />
+<img src="assets/screenshots/users.png" width="24%" />
+<img src="assets/screenshots/userDetails.png" width="24%" />
+
 </div>
 
 ---
