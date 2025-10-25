@@ -8,7 +8,7 @@
 
 This Flutter application showcases:
 
-* Splash screen and app launch flow
+* Splash screen 
 * Secure **email/password login** with validation
 * REST API **user list screen** with offline caching using **Hive**
 * **One-to-one video call** using **Agora RTC Engine**
@@ -21,7 +21,7 @@ This Flutter application showcases:
 
 ### 1. Splash Screen
 
-* Animated logo launch screen
+* Logo launch screen
 * Automatically navigates to Login screen
 
 ### 2. Login Screen
@@ -42,7 +42,7 @@ This Flutter application showcases:
 ### 4. One-to-One Video Call
 
 * Built with **Agora RTC Engine**
-* Join call using **hardcoded meeting/channel ID**
+* Join call using **hardcoded channel name**
 * Audio mute/unmute & video enable/disable
 * Handles **camera/microphone permissions**
 * Works on Android and iOS
@@ -104,10 +104,10 @@ flutter run
 ## 🖼️ Screenshots
 
 <div align="center">
-  <img src="assets/screenshots/splash.png" width="28%" />
-  <img src="assets/screenshots/login.png" width="28%" />
-  <img src="assets/screenshots/users.png" width="28%" />
-  <img src="assets/screenshots/userDetails.png" width="28%" />
+  <img src="assets/screenshots/splash.png" width="25%" />
+  <img src="assets/screenshots/login.png" width="25%" />
+  <img src="assets/screenshots/users.png" width="25%" />
+  <img src="assets/screenshots/userDetails.png" width="25%" />
 </div>
 
 ---
