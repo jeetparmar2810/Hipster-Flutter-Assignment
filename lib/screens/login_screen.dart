@@ -29,10 +29,7 @@ class _LoginScreenState extends State<LoginScreen>
   void _onLogin() {
     if (_formKey.currentState?.validate() ?? false) {
       context.read<AuthBloc>().add(
-        LoginRequested(
-          _emailCtrl.text.trim(),
-          _passwordCtrl.text.trim(),
-        ),
+        LoginRequested(_emailCtrl.text.trim(), _passwordCtrl.text.trim()),
       );
     }
   }
@@ -65,10 +62,7 @@ class _LoginScreenState extends State<LoginScreen>
         }
 
         if (state is AuthSuccess && mounted) {
-          Navigator.pushReplacementNamed(
-            context,
-            AppStrings.videoCallRoute,
-          );
+          Navigator.pushReplacementNamed(context, AppStrings.videoCallRoute);
         }
 
         if (state is AuthFailure && mounted) {
@@ -96,16 +90,16 @@ class _LoginScreenState extends State<LoginScreen>
                       end: Alignment.bottomRight,
                       colors: [
                         Color.lerp(
-                          AppColors.primary,
-                          AppColors.primaryLight,
-                          t,
-                        ) ??
+                              AppColors.primary,
+                              AppColors.primaryLight,
+                              t,
+                            ) ??
                             AppColors.primary,
                         Color.lerp(
-                          AppColors.primaryLight,
-                          AppColors.primary,
-                          t,
-                        ) ??
+                              AppColors.primaryLight,
+                              AppColors.primary,
+                              t,
+                            ) ??
                             AppColors.primaryLight,
                       ],
                     ),
@@ -113,11 +107,14 @@ class _LoginScreenState extends State<LoginScreen>
                 );
               },
             ),
-            Container(color: AppColors.white.withValues(alpha: AppDimens.alphaZeroFive)),
+            Container(
+              color: AppColors.white.withValues(alpha: AppDimens.alphaZeroFive),
+            ),
             Center(
               child: SingleChildScrollView(
                 padding: const EdgeInsets.symmetric(
-                    horizontal: AppDimens.paddingLarge),
+                  horizontal: AppDimens.paddingLarge,
+                ),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -142,26 +139,36 @@ class _LoginScreenState extends State<LoginScreen>
                     Text(
                       AppStrings.signInSubtitle,
                       style: TextStyle(
-                        color:
-                        AppColors.textPrimary.withValues(alpha: AppDimens.alphaMedium),
+                        color: AppColors.textPrimary.withValues(
+                          alpha: AppDimens.alphaMedium,
+                        ),
                         fontSize: AppDimens.textMedium,
                       ),
                     ),
                     const SizedBox(height: AppDimens.paddingXLarge),
                     ClipRRect(
-                      borderRadius:
-                      BorderRadius.circular(AppDimens.radiusXLarge),
+                      borderRadius: BorderRadius.circular(
+                        AppDimens.radiusXLarge,
+                      ),
                       child: BackdropFilter(
-                        filter: ImageFilter.blur(sigmaX: AppDimens.blurRadius, sigmaY: AppDimens.blurRadius),
+                        filter: ImageFilter.blur(
+                          sigmaX: AppDimens.blurRadius,
+                          sigmaY: AppDimens.blurRadius,
+                        ),
                         child: Container(
                           padding: EdgeInsets.all(AppDimens.paddingLarge),
                           width: AppDimens.width,
                           decoration: BoxDecoration(
-                            color: AppColors.surfaceLight.withValues(alpha: AppDimens.alphaBorder),
-                            borderRadius:
-                            BorderRadius.circular(AppDimens.radiusXLarge),
+                            color: AppColors.surfaceLight.withValues(
+                              alpha: AppDimens.alphaBorder,
+                            ),
+                            borderRadius: BorderRadius.circular(
+                              AppDimens.radiusXLarge,
+                            ),
                             border: Border.all(
-                              color: AppColors.white.withValues(alpha: AppDimens.alphaMedium),
+                              color: AppColors.white.withValues(
+                                alpha: AppDimens.alphaMedium,
+                              ),
                             ),
                             boxShadow: [
                               BoxShadow(
@@ -210,10 +217,12 @@ class _LoginScreenState extends State<LoginScreen>
                                   child: ElevatedButton(
                                     style: ElevatedButton.styleFrom(
                                       padding: const EdgeInsets.symmetric(
-                                          vertical: AppDimens.paddingMedium),
+                                        vertical: AppDimens.paddingMedium,
+                                      ),
                                       shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(
-                                            AppDimens.radiusMedium),
+                                          AppDimens.radiusMedium,
+                                        ),
                                       ),
                                       backgroundColor: AppColors.primary,
                                     ),
@@ -239,8 +248,9 @@ class _LoginScreenState extends State<LoginScreen>
                                   child: Text(
                                     AppStrings.viewUsers,
                                     style: TextStyle(
-                                      color: AppColors.textPrimary
-                                          .withValues(alpha: AppDimens.alphaMedium),
+                                      color: AppColors.textPrimary.withValues(
+                                        alpha: AppDimens.alphaMedium,
+                                      ),
                                       fontWeight: FontWeight.w500,
                                     ),
                                   ),

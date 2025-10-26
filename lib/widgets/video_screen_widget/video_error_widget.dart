@@ -4,7 +4,6 @@ import 'package:hipster_inc_assignment/utils/app_dimens.dart';
 import 'package:hipster_inc_assignment/utils/app_strings.dart';
 import 'package:hipster_inc_assignment/utils/app_text_styles.dart';
 
-
 class VideoErrorWidget extends StatelessWidget {
   final String message;
   final VoidCallback onRetry;
@@ -23,20 +22,29 @@ class VideoErrorWidget extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.error_outline,
-                size: AppDimens.iconXXLargeVideoCall, color: AppColors.error),
+            Icon(
+              Icons.error_outline,
+              size: AppDimens.iconXXLargeVideoCall,
+              color: AppColors.error,
+            ),
             const SizedBox(height: AppDimens.marginVideoCallMedium),
             const Text(AppStrings.errorTitle, style: AppTextStyles.title),
             const SizedBox(height: AppDimens.marginVideoCallSmall),
-            Text(message,
-                textAlign: TextAlign.center, style: AppTextStyles.body),
+            Text(
+              message,
+              textAlign: TextAlign.center,
+              style: AppTextStyles.body,
+            ),
             const SizedBox(height: AppDimens.marginVideoCallMedium),
             ElevatedButton(
               onPressed: onRetry,
               style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primary),
-              child: const Text(AppStrings.retryButton,
-                  style: AppTextStyles.button),
+                backgroundColor: AppColors.primary,
+              ),
+              child: const Text(
+                AppStrings.retryButton,
+                style: AppTextStyles.button,
+              ),
             ),
           ],
         ),

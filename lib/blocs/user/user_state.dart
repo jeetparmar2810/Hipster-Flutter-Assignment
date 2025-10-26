@@ -1,4 +1,4 @@
-import '../../models/user_model.dart';
+import 'package:hipster_inc_assignment/utils/user.dart';
 
 abstract class UserState {}
 
@@ -8,10 +8,12 @@ class UserLoading extends UserState {}
 
 class UserLoaded extends UserState {
   final List<UserModel> users;
+
   UserLoaded(this.users);
 }
 
 class UserError extends UserState {
   final String message;
+
   UserError(this.message);
 }

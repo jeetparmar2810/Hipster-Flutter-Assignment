@@ -27,19 +27,23 @@ class ChannelInputWidget extends StatelessWidget {
             hintText: AppStrings.channelHint,
             hintStyle: const TextStyle(color: AppColors.textMuted),
             filled: true,
-            fillColor: AppColors.textWhite
-                .withValues(alpha: AppDimens.alphaLowVideoCall),
+            fillColor: AppColors.textWhite.withValues(
+              alpha: AppDimens.alphaLowVideoCall,
+            ),
             border: OutlineInputBorder(
-              borderRadius:
-              BorderRadius.circular(AppDimens.radiusMediumVideoCall),
+              borderRadius: BorderRadius.circular(
+                AppDimens.radiusMediumVideoCall,
+              ),
               borderSide: const BorderSide(color: Colors.white24),
             ),
             focusedBorder: const OutlineInputBorder(
               borderRadius: BorderRadius.all(Radius.circular(10)),
               borderSide: BorderSide(color: AppColors.primary),
             ),
-            prefixIcon:
-            const Icon(Icons.meeting_room, color: AppColors.textMuted),
+            prefixIcon: const Icon(
+              Icons.meeting_room,
+              color: AppColors.textMuted,
+            ),
           ),
           onFieldSubmitted: (_) => onJoinChannel(),
         ),
@@ -50,15 +54,19 @@ class ChannelInputWidget extends StatelessWidget {
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.primary,
               shape: RoundedRectangleBorder(
-                borderRadius:
-                BorderRadius.circular(AppDimens.radiusMediumVideoCall),
+                borderRadius: BorderRadius.circular(
+                  AppDimens.radiusMediumVideoCall,
+                ),
               ),
               padding: const EdgeInsets.symmetric(
-                  vertical: AppDimens.paddingVideoCallMedium),
+                vertical: AppDimens.paddingVideoCallMedium,
+              ),
             ),
             onPressed: onJoinChannel,
-            child: const Text(AppStrings.joinButton,
-                style: AppTextStyles.button),
+            child: const Text(
+              AppStrings.joinButton,
+              style: AppTextStyles.button,
+            ),
           ),
         ),
         const SizedBox(height: AppDimens.marginVideoCallTiny),

@@ -67,7 +67,9 @@ class AgoraService {
 
   Future<void> switchToExternalCamera(String deviceId) async {
     Logger.i('External camera switching not supported on mobile');
-    throw UnsupportedError('External camera switching only available on desktop');
+    throw UnsupportedError(
+      'External camera switching only available on desktop',
+    );
   }
 
   Future<void> refreshCameraList() async {
@@ -87,24 +89,25 @@ class AgoraService {
           this.remoteUid = remoteUid;
           onUserJoined?.call(remoteUid);
         },
-        onUserOffline: (
-            RtcConnection connection,
-            int remoteUid,
-            UserOfflineReasonType reason,
+        onUserOffline:
+            (
+              RtcConnection connection,
+              int remoteUid,
+              UserOfflineReasonType reason,
             ) {
-          Logger.i('Remote user $remoteUid left (reason: $reason)');
+              Logger.i('Remote user $remoteUid left (reason: $reason)');
 
-          if (this.remoteUid == remoteUid) {
-            this.remoteUid = null;
-            onUserLeft?.call(remoteUid);
+              if (this.remoteUid == remoteUid) {
+                this.remoteUid = null;
+                onUserLeft?.call(remoteUid);
 
-            if (reason == UserOfflineReasonType.userOfflineQuit ||
-                reason == UserOfflineReasonType.userOfflineDropped) {
-              Logger.i('Call ended because remote user left');
-              onCallEnded?.call();
-            }
-          }
-        },
+                if (reason == UserOfflineReasonType.userOfflineQuit ||
+                    reason == UserOfflineReasonType.userOfflineDropped) {
+                  Logger.i('Call ended because remote user left');
+                  onCallEnded?.call();
+                }
+              }
+            },
         onLeaveChannel: (RtcConnection connection, RtcStats stats) {
           Logger.i('Left channel');
           isJoined = false;
@@ -118,19 +121,20 @@ class AgoraService {
           Logger.i('Agora Error: $err - $msg');
           onError?.call('Error $err: $msg');
         },
-        onConnectionStateChanged: (
-            RtcConnection connection,
-            ConnectionStateType state,
-            ConnectionChangedReasonType reason,
+        onConnectionStateChanged:
+            (
+              RtcConnection connection,
+              ConnectionStateType state,
+              ConnectionChangedReasonType reason,
             ) {
-          Logger.i('Connection changed: $state (reason: $reason)');
+              Logger.i('Connection changed: $state (reason: $reason)');
 
-          if (state == ConnectionStateType.connectionStateFailed ||
-              state == ConnectionStateType.connectionStateDisconnected) {
-            Logger.i('Connection lost, ending call');
-            onCallEnded?.call();
-          }
-        },
+              if (state == ConnectionStateType.connectionStateFailed ||
+                  state == ConnectionStateType.connectionStateDisconnected) {
+                Logger.i('Connection lost, ending call');
+                onCallEnded?.call();
+              }
+            },
         onConnectionLost: (RtcConnection connection) {
           Logger.i('Connection lost completely');
           onCallEnded?.call();
@@ -220,10 +224,7 @@ class AgoraService {
       await _engine!.muteLocalVideoStream(true);
 
       await _engine!.startScreenCapture(
-        const ScreenCaptureParameters2(
-          captureAudio: true,
-          captureVideo: true,
-        ),
+        const ScreenCaptureParameters2(captureAudio: true, captureVideo: true),
       );
 
       await _engine!.updateChannelMediaOptions(

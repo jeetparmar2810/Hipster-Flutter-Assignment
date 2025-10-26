@@ -16,16 +16,19 @@ class ToggleVideoEvent extends VideoEvent {
 
 class JoinChannel extends VideoEvent {
   final String channelName;
+
   JoinChannel(this.channelName);
 }
 
 class RemoteUserJoined extends VideoEvent {
   final int uid;
+
   RemoteUserJoined(this.uid);
 }
 
 class RemoteUserLeft extends VideoEvent {
   final int uid;
+
   RemoteUserLeft(this.uid);
 }
 
@@ -35,6 +38,7 @@ class UpdateVideoState extends VideoEvent {}
 
 class VideoErrorEvent extends VideoEvent {
   final String error;
+
   VideoErrorEvent(this.error);
 }
 
@@ -46,5 +50,6 @@ class ToggleScreenShare extends VideoEvent {}
 
 class ScreenShareStateChanged extends VideoEvent {
   final bool isSharing;
+
   ScreenShareStateChanged(this.isSharing);
 }

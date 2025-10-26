@@ -69,9 +69,9 @@ class VideoBloc extends Bloc<VideoEvent, VideoState> {
   }
 
   Future<void> _onJoinChannel(
-      JoinChannel event,
-      Emitter<VideoState> emit,
-      ) async {
+    JoinChannel event,
+    Emitter<VideoState> emit,
+  ) async {
     Logger.i('Bloc: Joining channel ${event.channelName}...');
     emit(VideoLoading());
     try {
@@ -95,25 +95,25 @@ class VideoBloc extends Bloc<VideoEvent, VideoState> {
   }
 
   Future<void> _onToggleAudio(
-      ToggleAudioEvent event,
-      Emitter<VideoState> emit,
-      ) async {
+    ToggleAudioEvent event,
+    Emitter<VideoState> emit,
+  ) async {
     Logger.i('Bloc: Toggling audio - ${event.enabled}');
     await _agoraService.toggleAudio(event.enabled);
   }
 
   Future<void> _onToggleVideo(
-      ToggleVideoEvent event,
-      Emitter<VideoState> emit,
-      ) async {
+    ToggleVideoEvent event,
+    Emitter<VideoState> emit,
+  ) async {
     Logger.i('Bloc: Toggling video - ${event.enabled}');
     await _agoraService.toggleVideo(event.enabled);
   }
 
   Future<void> _onLeaveChannel(
-      LeaveChannel event,
-      Emitter<VideoState> emit,
-      ) async {
+    LeaveChannel event,
+    Emitter<VideoState> emit,
+  ) async {
     Logger.i('Bloc: Leaving channel...');
     await _agoraService.leaveChannel();
     emit(VideoInitial());
@@ -130,9 +130,9 @@ class VideoBloc extends Bloc<VideoEvent, VideoState> {
   }
 
   Future<void> _onStartScreenShare(
-      StartScreenShare event,
-      Emitter<VideoState> emit,
-      ) async {
+    StartScreenShare event,
+    Emitter<VideoState> emit,
+  ) async {
     try {
       Logger.i('Bloc: Starting screen share...');
       await _agoraService.startScreenShare();
@@ -144,9 +144,9 @@ class VideoBloc extends Bloc<VideoEvent, VideoState> {
   }
 
   Future<void> _onStopScreenShare(
-      StopScreenShare event,
-      Emitter<VideoState> emit,
-      ) async {
+    StopScreenShare event,
+    Emitter<VideoState> emit,
+  ) async {
     try {
       Logger.i('Bloc: Stopping screen share...');
       await _agoraService.stopScreenShare();
@@ -157,9 +157,9 @@ class VideoBloc extends Bloc<VideoEvent, VideoState> {
   }
 
   Future<void> _onToggleScreenShare(
-      ToggleScreenShare event,
-      Emitter<VideoState> emit,
-      ) async {
+    ToggleScreenShare event,
+    Emitter<VideoState> emit,
+  ) async {
     try {
       Logger.i('Bloc: Toggling screen share...');
       await _agoraService.toggleScreenShare();
@@ -171,9 +171,9 @@ class VideoBloc extends Bloc<VideoEvent, VideoState> {
   }
 
   void _onScreenShareStateChanged(
-      ScreenShareStateChanged event,
-      Emitter<VideoState> emit,
-      ) {
+    ScreenShareStateChanged event,
+    Emitter<VideoState> emit,
+  ) {
     Logger.i('Bloc: Processing screen share state change');
     _emitReadyState(emit);
   }

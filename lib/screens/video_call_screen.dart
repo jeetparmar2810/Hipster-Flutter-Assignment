@@ -117,7 +117,8 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
 
     _videoBloc.add(JoinChannel(channel));
     await Future.delayed(
-        const Duration(milliseconds: AppDimens.durationLongVideoCallMS));
+      const Duration(milliseconds: AppDimens.durationLongVideoCallMS),
+    );
 
     if (!mounted) return;
     setState(() => _loading = false);
@@ -199,7 +200,8 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
         ),
       );
       await Future.delayed(
-          Duration(milliseconds: AppDimens.durationLongVideoCallMS));
+        Duration(milliseconds: AppDimens.durationLongVideoCallMS),
+      );
     }
 
     if (!mounted) return;
@@ -214,19 +216,25 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
       builder: (context) => AlertDialog(
         backgroundColor: AppColors.backgroundDark,
         title: const Text(AppStrings.endCallTitle, style: AppTextStyles.title),
-        content:
-        const Text(AppStrings.endCallContent, style: AppTextStyles.body),
+        content: const Text(
+          AppStrings.endCallContent,
+          style: AppTextStyles.body,
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child:
-            const Text(AppStrings.cancelButton, style: AppTextStyles.body),
+            child: const Text(
+              AppStrings.cancelButton,
+              style: AppTextStyles.body,
+            ),
           ),
           ElevatedButton(
             onPressed: () => Navigator.pop(context, true),
             style: ElevatedButton.styleFrom(backgroundColor: AppColors.error),
-            child: const Text(AppStrings.endCallButton,
-                style: AppTextStyles.button),
+            child: const Text(
+              AppStrings.endCallButton,
+              style: AppTextStyles.button,
+            ),
           ),
         ],
       ),
@@ -333,13 +341,16 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
 
         return Container(
           padding: const EdgeInsets.symmetric(
-              horizontal: AppDimens.paddingVideoCallLarge,
-              vertical: AppDimens.paddingVideoCallMedium),
+            horizontal: AppDimens.paddingVideoCallLarge,
+            vertical: AppDimens.paddingVideoCallMedium,
+          ),
           decoration: BoxDecoration(
-            color: Colors.black
-                .withValues(alpha: AppDimens.alphaControlBackgroundVideoCall),
+            color: Colors.black.withValues(
+              alpha: AppDimens.alphaControlBackgroundVideoCall,
+            ),
             borderRadius: const BorderRadius.vertical(
-                top: Radius.circular(AppDimens.radiusTopVideoCall)),
+              top: Radius.circular(AppDimens.radiusTopVideoCall),
+            ),
           ),
           child: Column(
             children: [
@@ -383,10 +394,10 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
           onTap: isScreenSharing
               ? null
               : () {
-            setState(() => videoEnabled = !videoEnabled);
-            _service.toggleVideo(videoEnabled);
-            _videoBloc.add(ToggleVideoEvent(videoEnabled));
-          },
+                  setState(() => videoEnabled = !videoEnabled);
+                  _service.toggleVideo(videoEnabled);
+                  _videoBloc.add(ToggleVideoEvent(videoEnabled));
+                },
         ),
         const SizedBox(width: AppDimens.marginVideoCallMedium),
         VideoControlButton(
@@ -406,8 +417,11 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
           child: const CircleAvatar(
             radius: AppDimens.avatarRadiusSmallVideoCall,
             backgroundColor: AppColors.error,
-            child: Icon(Icons.call_end,
-                color: AppColors.textWhite, size: AppDimens.iconSizeVideoCall),
+            child: Icon(
+              Icons.call_end,
+              color: AppColors.textWhite,
+              size: AppDimens.iconSizeVideoCall,
+            ),
           ),
         ),
       ],

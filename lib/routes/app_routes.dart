@@ -22,7 +22,9 @@ class AppRoutes {
         return MaterialPageRoute(builder: (_) => const UserListScreen());
       case videoCall:
         final args = settings.arguments;
-        final channelName = (args is Map<String, dynamic>) ? args[AppStrings.channelNameArg] as String? : null;
+        final channelName = (args is Map<String, dynamic>)
+            ? args[AppStrings.channelNameArg] as String?
+            : null;
         return MaterialPageRoute(
           builder: (_) => VideoCallScreen(channelName: channelName),
         );
@@ -30,7 +32,6 @@ class AppRoutes {
         return MaterialPageRoute(builder: (_) => const LoginScreen());
     }
   }
-
 
   static void navigateToLogin(BuildContext context) {
     Navigator.pushNamedAndRemoveUntil(context, login, (route) => false);

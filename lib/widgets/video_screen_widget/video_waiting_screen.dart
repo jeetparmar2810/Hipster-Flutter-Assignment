@@ -8,10 +8,7 @@ import 'package:hipster_inc_assignment/utils/app_text_styles.dart';
 class VideoWaitingScreen extends StatelessWidget {
   final String? currentChannel;
 
-  const VideoWaitingScreen({
-    super.key,
-    this.currentChannel,
-  });
+  const VideoWaitingScreen({super.key, this.currentChannel});
 
   @override
   Widget build(BuildContext context) {
@@ -32,10 +29,12 @@ class VideoWaitingScreen extends StatelessWidget {
                   vertical: AppDimens.paddingVideoCallMedium,
                 ),
                 decoration: BoxDecoration(
-                  color: AppColors.textWhite
-                      .withValues(alpha: AppDimens.alphaLowVideoCall),
-                  borderRadius:
-                  BorderRadius.circular(AppDimens.radiusLargeVideoCall),
+                  color: AppColors.textWhite.withValues(
+                    alpha: AppDimens.alphaLowVideoCall,
+                  ),
+                  borderRadius: BorderRadius.circular(
+                    AppDimens.radiusLargeVideoCall,
+                  ),
                 ),
                 child: Text(
                   '${AppStrings.channelPrefix}$currentChannel',
@@ -47,9 +46,11 @@ class VideoWaitingScreen extends StatelessWidget {
                 ),
               ),
             ] else ...[
-              const Icon(Icons.video_call,
-                  size: AppDimens.iconXXLargeVideoCall,
-                  color: AppColors.textMuted),
+              const Icon(
+                Icons.video_call,
+                size: AppDimens.iconXXLargeVideoCall,
+                color: AppColors.textMuted,
+              ),
               const SizedBox(height: AppDimens.marginVideoCallMedium),
               const Text(AppStrings.readyMessage, style: AppTextStyles.body),
             ],

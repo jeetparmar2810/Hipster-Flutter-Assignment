@@ -17,9 +17,11 @@ class UserListScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final double topPadding = MediaQuery.of(context).padding.top + kToolbarHeight;
+    final double topPadding =
+        MediaQuery.of(context).padding.top + kToolbarHeight;
     return BlocProvider(
-      create: (context) => UserBloc(context.read<UserRepository>())..add(FetchUsersEvent()),
+      create: (context) =>
+          UserBloc(context.read<UserRepository>())..add(FetchUsersEvent()),
       child: Scaffold(
         extendBodyBehindAppBar: true,
         appBar: AppBar(

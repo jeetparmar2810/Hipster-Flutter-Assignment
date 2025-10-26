@@ -1,6 +1,8 @@
 # 🎯 Hipster Flutter Assignment – Agora Video App
 
-**Modern Flutter application demonstrating one-to-one video calls, REST API user management, and store-ready design using Agora SDK. Built with BLoC pattern for robust state management. Local storage is implemented with Hive.**
+**Modern Flutter application demonstrating one-to-one video calls, REST API user management, and
+store-ready design using Agora SDK. Built with BLoC pattern for robust state management. Local
+storage is implemented with Hive.**
 
 ---
 
@@ -97,26 +99,29 @@ flutter run
 4. Run on **two devices/emulators** to test one-to-one video calls
 5. Ensure camera & microphone permissions are added in:
 
-   * **Android:** `AndroidManifest.xml`
-   * **iOS:** `Info.plist`
+    * **Android:** `AndroidManifest.xml`
+    * **iOS:** `Info.plist`
 
 ---
 
 ## 🧾 Assumptions & Limitations
 
 ### 🔹 Assumptions
+
 1. **No backend server** is connected yet — user login is local only.
 2. **Same credentials** can be used on multiple devices for testing purposes.
 3. Both users must **enter the same channel name** to join the same video room.
-   - Example:
-      - Device 1 → `channel: demoRoom01`
-      - Device 2 → `channel: demoRoom01`  
-        ✅ Both devices connect to the same call.
-4. **Internet connection** is required for video calls — Agora uses cloud-based real-time communication.     
+    - Example:
+        - Device 1 → `channel: demoRoom01`
+        - Device 2 → `channel: demoRoom01`  
+          ✅ Both devices connect to the same call.
+4. **Internet connection** is required for video calls — Agora uses cloud-based real-time
+   communication.
 
 ---
 
 ### 🔹 Limitations
+
 1. ❌ No real authentication or user identification (shared login).
 2. ❌ No server-generated Agora token (uses static token or empty for dev mode).
 3. ❌ No real-time call invitation or push notification yet.
@@ -132,8 +137,6 @@ flutter run
 3. **Enter identical channel names** (e.g., `demoCall01`) on both.
 4. Tap **Join Channel** → both should connect in a one-to-one video call.
 5. Tap **Back** or **End Call** → both should return to the **Login Screen**.
-
-
 
 ## 🖼️ Screenshots
 
@@ -160,7 +163,8 @@ flutter run
 | User List        | UserBloc  |
 | Video Call       | VideoBloc |
 
-> All API calls, state changes, and UI updates are handled via **BLoC** for a clean separation of concerns.
+> All API calls, state changes, and UI updates are handled via **BLoC** for a clean separation of
+> concerns.
 
 ---
 

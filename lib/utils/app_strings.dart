@@ -37,7 +37,6 @@ class AppStrings {
   static const String videoCall = 'Video Call';
   static const String audioCall = 'Audio Call';
 
-  // Video Call Screen
   static const String videoCallTitle = 'Video Call';
   static const String joinChannel = 'Join Channel';
   static const String enterChannelName = 'Enter Channel Name to Join';
@@ -49,7 +48,6 @@ class AppStrings {
   static const String sameChannelNote =
       'Both users must use the same channel name';
 
-  // Call Controls
   static const String mute = 'Mute';
   static const String unmute = 'Unmute';
   static const String cameraOn = 'Camera On';
@@ -58,27 +56,24 @@ class AppStrings {
   static const String endCall = 'End Call';
   static const String cameraSwitched = 'Camera switched';
 
-  // Error Messages
   static const String errorOccurred = 'An error occurred';
   static const String initializationFailed = 'Failed to initialize';
   static const String joinChannelFailed = 'Failed to join channel';
   static const String enterChannelNameError = 'Please enter a channel name';
   static const String switchCameraError = 'Switch camera error';
   static const String permissionDenied = 'Permission denied';
-  static const String noInternet = 'Internet connection is required for all video calls.';
+  static const String noInternet =
+      'Internet connection is required for all video calls.';
 
-  // Success Messages
   static const String loginSuccess = 'Login successful';
   static const String channelJoined = 'Channel joined successfully';
   static const String callEnded = 'Call ended';
 
-  // Loading Messages
   static const String loading = 'Loading...';
   static const String joiningChannel = 'Joining channel...';
   static const String initializing = 'Initializing...';
   static const String connecting = 'Connecting...';
 
-  // Common
   static const String retry = 'Retry';
   static const String cancel = 'Cancel';
   static const String ok = 'OK';
@@ -108,7 +103,6 @@ class AppStrings {
 
   static const int loginDelayMs = 700;
 
-  // Route Names
   static const String loginRoute = '/login';
   static const String usersRoute = '/users';
   static const String videoCallRoute = '/video-call';
@@ -125,7 +119,8 @@ class AppStrings {
   static const joinPrompt = 'Join a Channel';
   static const channelHint = 'Enter channel name';
   static const joinButton = 'Join';
-  static const bothUsersHint = 'Both users must join the same channel to start a call';
+  static const bothUsersHint =
+      'Both users must join the same channel to start a call';
   static const waitingMessage = 'Waiting for other user...';
   static const readyMessage = 'Ready to start call';
   static const errorTitle = 'Oops! Something went wrong';

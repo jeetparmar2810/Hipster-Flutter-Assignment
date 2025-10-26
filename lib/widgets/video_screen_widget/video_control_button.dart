@@ -26,8 +26,9 @@ class VideoControlButton extends StatelessWidget {
             : AppDimens.opacityEnabledVideoCall,
         child: CircleAvatar(
           radius: AppDimens.avatarRadiusSmallVideoCall,
-          backgroundColor: AppColors.textWhite
-              .withValues(alpha: AppDimens.alphaBackgroundVideoCall),
+          backgroundColor: AppColors.textWhite.withValues(
+            alpha: AppDimens.alphaBackgroundVideoCall,
+          ),
           child: Icon(icon, color: color, size: AppDimens.iconSizeVideoCall),
         ),
       ),

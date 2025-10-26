@@ -27,16 +27,19 @@ class VideoPreviewWidget extends StatelessWidget {
         child: Container(
           decoration: BoxDecoration(
             border: Border.all(
-              color: AppColors.textWhite
-                  .withValues(alpha: AppDimens.alphaBorderVideoCall),
+              color: AppColors.textWhite.withValues(
+                alpha: AppDimens.alphaBorderVideoCall,
+              ),
               width: AppDimens.borderWidthVideoCall,
             ),
-            borderRadius:
-            BorderRadius.circular(AppDimens.radiusMediumVideoCall),
+            borderRadius: BorderRadius.circular(
+              AppDimens.radiusMediumVideoCall,
+            ),
             boxShadow: [
               BoxShadow(
-                color: Colors.black
-                    .withValues(alpha: AppDimens.alphaShadowVideoCall),
+                color: Colors.black.withValues(
+                  alpha: AppDimens.alphaShadowVideoCall,
+                ),
                 blurRadius: AppDimens.blurRadiusVideoCall,
               ),
             ],
@@ -46,15 +49,15 @@ class VideoPreviewWidget extends StatelessWidget {
               (videoEnabled || isScreenSharing)
                   ? localVideoWidget
                   : Container(
-                color: Colors.black87,
-                child: const Center(
-                  child: Icon(
-                    Icons.videocam_off,
-                    color: AppColors.textMuted,
-                    size: AppDimens.iconMediumVideoCall,
-                  ),
-                ),
-              ),
+                      color: Colors.black87,
+                      child: const Center(
+                        child: Icon(
+                          Icons.videocam_off,
+                          color: AppColors.textMuted,
+                          size: AppDimens.iconMediumVideoCall,
+                        ),
+                      ),
+                    ),
               if (isScreenSharing)
                 Positioned(
                   bottom: AppDimens.positionVideoCallBottom,
@@ -66,22 +69,27 @@ class VideoPreviewWidget extends StatelessWidget {
                     ),
                     decoration: BoxDecoration(
                       color: AppColors.primary,
-                      borderRadius:
-                      BorderRadius.circular(AppDimens.radiusTinyVideoCall),
+                      borderRadius: BorderRadius.circular(
+                        AppDimens.radiusTinyVideoCall,
+                      ),
                     ),
                     child: const Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Icon(Icons.screen_share,
-                            size: AppDimens.iconTinyVideoCall,
-                            color: Colors.black),
+                        Icon(
+                          Icons.screen_share,
+                          size: AppDimens.iconTinyVideoCall,
+                          color: Colors.black,
+                        ),
                         SizedBox(width: AppDimens.marginVideoCallTiny),
-                        Text(AppStrings.sharing,
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: AppDimens.textTinyVideoCall,
-                              fontWeight: FontWeight.bold,
-                            )),
+                        Text(
+                          AppStrings.sharing,
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: AppDimens.textTinyVideoCall,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ],
                     ),
                   ),

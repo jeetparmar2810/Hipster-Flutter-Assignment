@@ -11,8 +11,9 @@ class NetworkUtils {
       return false;
     }
     try {
-      final result = await InternetAddress.lookup('google.com')
-          .timeout(Duration(seconds: AppDimens.duration5MS));
+      final result = await InternetAddress.lookup(
+        'google.com',
+      ).timeout(Duration(seconds: AppDimens.duration5MS));
       return result.isNotEmpty && result[0].rawAddress.isNotEmpty;
     } catch (_) {
       return false;

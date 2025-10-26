@@ -12,7 +12,6 @@ class AppDimens {
   static const double width = 400;
   static const double height = 400;
 
-
   static const double marginExtraSmall = 6.0;
   static const double marginSmall = 8;
   static const double marginMedium = 16;
@@ -41,7 +40,6 @@ class AppDimens {
 
   static const double avatarRadiusSmall = 25;
   static const double avatarRadiusLarge = 50;
-
 
   static const double blurRadius = 20;
   static const double dragHandleRadius = 10.0;
@@ -129,5 +127,5 @@ class AppDimens {
 
   static const int durationVideoCallMS = durationOneMS;
   static const int durationOneSecondVideoCall = durationMS;
-  static const int durationLongVideoCallMS = durationLongMS ;
+  static const int durationLongVideoCallMS = durationLongMS;
 }

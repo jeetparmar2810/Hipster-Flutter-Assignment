@@ -19,8 +19,9 @@ class ConnectedLabelWidget extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(AppDimens.paddingVideoCallMedium),
       decoration: BoxDecoration(
-        color: AppColors.textWhite
-            .withValues(alpha: AppDimens.alphaLowVideoCall),
+        color: AppColors.textWhite.withValues(
+          alpha: AppDimens.alphaLowVideoCall,
+        ),
         borderRadius: BorderRadius.circular(AppDimens.radiusMediumVideoCall),
       ),
       child: Column(
@@ -55,16 +56,20 @@ class ConnectedLabelWidget extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: const [
-                Icon(Icons.screen_share,
-                    size: AppDimens.iconSmallVideoCall,
-                    color: AppColors.primary),
+                Icon(
+                  Icons.screen_share,
+                  size: AppDimens.iconSmallVideoCall,
+                  color: AppColors.primary,
+                ),
                 SizedBox(width: AppDimens.marginVideoCallTiny),
-                Text(AppStrings.screenSharingActive,
-                    style: TextStyle(
-                      color: AppColors.primary,
-                      fontSize: AppDimens.textSmallVideoCall,
-                      fontWeight: FontWeight.w500,
-                    )),
+                Text(
+                  AppStrings.screenSharingActive,
+                  style: TextStyle(
+                    color: AppColors.primary,
+                    fontSize: AppDimens.textSmallVideoCall,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
               ],
             ),
           ],

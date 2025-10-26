@@ -2,9 +2,8 @@ import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:hipster_inc_assignment/utils/app_strings.dart';
 import 'package:hipster_inc_assignment/utils/logger.dart';
+import 'package:hipster_inc_assignment/utils/user.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-
-import '../models/user_model.dart';
 
 class UserRepository {
   final Dio _dio = Dio(
@@ -22,12 +21,10 @@ class UserRepository {
 
     try {
       box = await Hive.openBox('usersBox');
-      final response = await _dio.get(apiUrl,
-        options: Options(
-          headers: {
-            'x-api-key': apiKey,
-          },
-        ),);
+      final response = await _dio.get(
+        apiUrl,
+        options: Options(headers: {'x-api-key': apiKey}),
+      );
       if (response.statusCode != 200) {
         throw DioException(
           requestOptions: response.requestOptions,

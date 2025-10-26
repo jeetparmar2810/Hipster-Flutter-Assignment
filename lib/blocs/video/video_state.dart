@@ -40,5 +40,6 @@ class VideoReady extends VideoState {
 
 class VideoError extends VideoState {
   final String message;
+
   VideoError(this.message);
 }

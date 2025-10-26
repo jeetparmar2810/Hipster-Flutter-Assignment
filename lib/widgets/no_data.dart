@@ -35,7 +35,8 @@ class NoDataWidget extends StatelessWidget {
             Text(
               message,
               textAlign: TextAlign.center,
-              style: textStyle ??
+              style:
+                  textStyle ??
                   Theme.of(context).textTheme.bodyMedium?.copyWith(
                     fontSize: AppDimens.textMedium,
                     fontWeight: FontWeight.w500,
@@ -46,14 +47,9 @@ class NoDataWidget extends StatelessWidget {
               const SizedBox(height: AppDimens.paddingMedium),
               TextButton.icon(
                 onPressed: onRetry,
-                icon: const Icon(
-                  Icons.refresh,
-                  size: AppDimens.iconSmall,
-                ),
+                icon: const Icon(Icons.refresh, size: AppDimens.iconSmall),
                 label: const Text(AppStrings.retry),
-                style: TextButton.styleFrom(
-                  foregroundColor: AppColors.primary,
-                ),
+                style: TextButton.styleFrom(foregroundColor: AppColors.primary),
               ),
             ],
           ],
