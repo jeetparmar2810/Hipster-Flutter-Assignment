@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../utils/app_colors.dart';
+import '../utils/app_dimens.dart';
 
 class AppTextField extends StatefulWidget {
   final TextEditingController controller;
@@ -46,9 +47,7 @@ class _AppTextFieldState extends State<AppTextField> {
   }
 
   void _togglePasswordVisibility() {
-    setState(() {
-      _isPasswordVisible = !_isPasswordVisible;
-    });
+    setState(() => _isPasswordVisible = !_isPasswordVisible);
   }
 
   @override
@@ -56,18 +55,20 @@ class _AppTextFieldState extends State<AppTextField> {
     final isPasswordField = widget.obscureText;
 
     return AnimatedContainer(
-      duration: const Duration(milliseconds: 200),
-      margin: const EdgeInsets.symmetric(vertical: 6),
+      duration: Duration(milliseconds: AppDimens.durationMediumMS),
+      margin: const EdgeInsets.symmetric(
+        vertical: AppDimens.marginExtraSmall,
+      ),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.circular(AppDimens.radiusMedium),
         boxShadow: _isFocused
             ? [
-                BoxShadow(
-                  color: AppColors.primary.withValues(alpha: 0.25),
-                  blurRadius: 12,
-                  offset: const Offset(0, 6),
-                ),
-              ]
+          BoxShadow(
+            color: AppColors.primary.withValues(alpha: AppDimens.alphaLow),
+            blurRadius: AppDimens.blurRadius,
+            offset:AppDimens.shadowLarge,
+          ),
+        ]
             : [],
       ),
       child: TextFormField(
@@ -79,98 +80,93 @@ class _AppTextFieldState extends State<AppTextField> {
           final error = widget.validator?.call(value);
           WidgetsBinding.instance.addPostFrameCallback((_) {
             if (mounted) {
-              setState(() {
-                _hasError = error != null;
-              });
+              setState(() => _hasError = error != null);
             }
           });
           return error;
         },
         style: const TextStyle(
-          color: Colors.white,
-          fontSize: 16,
+          color: AppColors.textPrimary,
+          fontSize: AppDimens.textLarge,
           fontWeight: FontWeight.w400,
         ),
-        cursorColor: Colors.white,
+        cursorColor: AppColors.textPrimary,
         decoration: InputDecoration(
           filled: true,
-          fillColor: AppColors.surfaceLight.withValues(alpha: 0.1),
+          fillColor: AppColors.surfaceLight.withValues(alpha: AppDimens.alphaOverlay),
           contentPadding: const EdgeInsets.symmetric(
-            vertical: 16,
-            horizontal: 14,
+            vertical: AppDimens.paddingMedium,
+            horizontal: AppDimens.paddingSmall,
           ),
           hintText: widget.label,
           hintStyle: TextStyle(
-            color: Colors.white.withValues(alpha: 0.6),
-            fontSize: 16,
+            color: AppColors.textPrimary.withValues(alpha: AppDimens.alphaMedium),
+            fontSize: AppDimens.textLarge,
             fontWeight: FontWeight.w400,
           ),
           prefixIcon: widget.prefixIcon != null
               ? Icon(
-                  widget.prefixIcon,
-                  color: _hasError
-                      ? AppColors.error
-                      : (_isFocused
-                            ? AppColors.primaryLight
-                            : Colors.white), // Pure white
-                  size: 22,
-                )
+            widget.prefixIcon,
+            color: _hasError
+                ? AppColors.error
+                : (_isFocused
+                ? AppColors.primaryLight
+                : AppColors.textPrimary),
+            size: AppDimens.iconMedium,
+          )
               : null,
           suffixIcon: isPasswordField
               ? GestureDetector(
-                  onTap: _togglePasswordVisibility,
-                  child: AnimatedSwitcher(
-                    duration: const Duration(milliseconds: 250),
-                    transitionBuilder:
-                        (Widget child, Animation<double> animation) {
-                          return RotationTransition(
-                            turns: Tween(
-                              begin: 0.75,
-                              end: 1.0,
-                            ).animate(animation),
-                            child: FadeTransition(
-                              opacity: animation,
-                              child: child,
-                            ),
-                          );
-                        },
-                    child: Icon(
-                      _isPasswordVisible
-                          ? Icons.visibility
-                          : Icons.visibility_off,
-                      key: ValueKey<bool>(_isPasswordVisible),
-                      color: _hasError
-                          ? AppColors.error
-                          : (_isFocused
-                                ? AppColors.primaryLight
-                                : Colors.white), // Pure white
-                      size: 22,
-                    ),
-                  ),
-                )
+            onTap: _togglePasswordVisibility,
+            child: AnimatedSwitcher(
+              duration: const Duration(milliseconds: 250),
+              transitionBuilder:
+                  (Widget child, Animation<double> animation) {
+                return RotationTransition(
+                  turns: Tween(begin: 0.75, end: 1.0).animate(animation),
+                  child: FadeTransition(opacity: animation, child: child),
+                );
+              },
+              child: Icon(
+                _isPasswordVisible
+                    ? Icons.visibility
+                    : Icons.visibility_off,
+                key: ValueKey<bool>(_isPasswordVisible),
+                color: _hasError
+                    ? AppColors.error
+                    : (_isFocused
+                    ? AppColors.primaryLight
+                    : AppColors.textPrimary),
+                size: AppDimens.iconMedium,
+              ),
+            ),
+          )
               : null,
           enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(14),
+            borderRadius: BorderRadius.circular(AppDimens.radiusMedium),
             borderSide: BorderSide(
-              color: Colors.white.withValues(alpha: 0.3),
+              color: AppColors.textPrimary.withValues(alpha: AppDimens.alphaLow),
               width: 1,
             ),
           ),
           focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(14),
-            borderSide: BorderSide(color: AppColors.primaryLight, width: 1.6),
+            borderRadius: BorderRadius.circular(AppDimens.radiusMedium),
+            borderSide: BorderSide(
+              color: AppColors.primaryLight,
+              width: 1.6,
+            ),
           ),
           errorBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(14),
+            borderRadius: BorderRadius.circular(AppDimens.radiusMedium),
             borderSide: BorderSide(color: AppColors.error, width: 1.2),
           ),
           focusedErrorBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(14),
+            borderRadius: BorderRadius.circular(AppDimens.radiusMedium),
             borderSide: BorderSide(color: AppColors.error, width: 1.6),
           ),
           errorStyle: TextStyle(
-            color: AppColors.error.withValues(alpha: 0.9),
-            fontSize: 13,
+            color: AppColors.error.withValues(alpha: AppDimens.alphaHigh),
+            fontSize: AppDimens.textSmall,
             fontWeight: FontWeight.w500,
             height: 1.2,
           ),

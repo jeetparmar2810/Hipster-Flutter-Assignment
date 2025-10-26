@@ -13,11 +13,12 @@ class AppColors {
   static const Color textPrimary = Colors.white;
   static const Color textSecondary = Color(0xFFB0B0B0);
   static const Color textHint = Color(0xFF808080);
+  static const Color white = textPrimary;
   static const Color success = Color(0xFF4CAF50);
   static const Color error = Colors.redAccent;
   static const Color warning = Colors.orangeAccent;
   static const Color info = Color(0xFF00B7C2);
-  static const Color controlActive = Colors.white;
+  static const Color controlActive = textPrimary;
   static const Color controlInactive = Colors.redAccent;
   static const Color controlBackground = Color(0x26FFFFFF);
   static const Color border = Color(0x3DFFFFFF);
@@ -43,7 +44,7 @@ class AppColors {
     colors: [Colors.black.withValues(alpha: 0.8), Colors.transparent],
   );
   static const Color backgroundDark = Color(0xFF0E403F);
-  static const Color textWhite = Colors.white;
+  static const Color textWhite = textPrimary;
   static const Color textMuted = Colors.white70;
   static const List<Color> gradient = [backgroundDark, primaryDark, primary];
 }

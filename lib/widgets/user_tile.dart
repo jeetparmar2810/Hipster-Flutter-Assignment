@@ -1,60 +1,57 @@
 import 'package:flutter/material.dart';
 import '../models/user_model.dart';
 import '../utils/app_colors.dart';
+import '../utils/app_dimens.dart';
 import '../utils/app_strings.dart';
 
 class UserTile extends StatelessWidget {
   final UserModel user;
-
   const UserTile({super.key, required this.user});
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () => _showUserDetails(context),
-      borderRadius: BorderRadius.circular(16),
-      splashColor: AppColors.primaryLight.withValues(alpha: 0.2),
+      borderRadius: BorderRadius.circular(AppDimens.radiusLarge),
+      splashColor: AppColors.primaryLight.withValues(alpha: AppDimens.alphaLow),
       child: Container(
-        margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+        margin: const EdgeInsets.symmetric(
+          vertical: AppDimens.marginSmall,
+          horizontal: AppDimens.marginMedium,
+        ),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(AppDimens.radiusLarge),
           gradient: AppColors.primaryGradient,
           border: Border.all(
-            color: Colors.white.withValues(alpha: 0.1),
-            width: 0.6,
+            color: AppColors.white.withValues(alpha: AppDimens.alphaBorder),
+            width: AppDimens.borderWidthSmall,
           ),
           boxShadow: [
             BoxShadow(
               color: AppColors.shadow,
-              blurRadius: 12,
-              offset: const Offset(0, 6),
-            ),
-            BoxShadow(
-              color: Colors.white.withValues(alpha: 0.05),
-              blurRadius: 2,
-              offset: const Offset(-1, -1),
+              blurRadius: AppDimens.blurRadius,
+              offset: AppDimens.shadowLarge,
             ),
           ],
         ),
         child: ListTile(
           contentPadding: const EdgeInsets.symmetric(
-            horizontal: 16,
-            vertical: 8,
+            horizontal: AppDimens.paddingMedium,
+            vertical: AppDimens.paddingSmall,
           ),
           leading: Container(
             decoration: const BoxDecoration(
               shape: BoxShape.circle,
               gradient: LinearGradient(
                 colors: [AppColors.primaryLight, AppColors.primary],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
               ),
             ),
-            padding: const EdgeInsets.all(2.5),
+            padding: const EdgeInsets.all(AppDimens.paddingXSmall),
             child: CircleAvatar(
-              radius: 25,
+              radius: AppDimens.avatarRadiusSmall,
               backgroundColor: AppColors.surfaceLight,
               backgroundImage: NetworkImage(user.avatar),
+              onBackgroundImageError: (_, __) {},
             ),
           ),
           title: Text(
@@ -62,20 +59,20 @@ class UserTile extends StatelessWidget {
             style: const TextStyle(
               color: AppColors.textPrimary,
               fontWeight: FontWeight.w600,
-              fontSize: 16,
+              fontSize: AppDimens.textLarge,
             ),
           ),
           subtitle: Text(
             user.email,
             style: TextStyle(
-              color: AppColors.textPrimary.withValues(alpha: 0.8),
-              fontSize: 13.5,
+              color: AppColors.textPrimary.withValues(alpha: AppDimens.alphaMedium),
+              fontSize: AppDimens.textMedium,
             ),
           ),
-          trailing: const Icon(
+          trailing: Icon(
             Icons.arrow_forward_ios_rounded,
-            size: 16,
-            color: Colors.white70,
+            size: AppDimens.iconSmall,
+            color: AppColors.textMuted,
           ),
         ),
       ),
@@ -87,118 +84,96 @@ class UserTile extends StatelessWidget {
       context: context,
       backgroundColor: Colors.transparent,
       isScrollControlled: true,
-      builder: (context) {
-        return _UserDetailSheet(user: user);
-      },
+      builder: (_) => _UserDetailSheet(user: user),
     );
   }
 }
 
 class _UserDetailSheet extends StatelessWidget {
   final UserModel user;
-
   const _UserDetailSheet({required this.user});
 
   @override
   Widget build(BuildContext context) {
     return DraggableScrollableSheet(
-      initialChildSize: 0.55,
-      maxChildSize: 0.85,
-      minChildSize: 0.45,
+      initialChildSize: AppDimens.userSheetInitialSize,
+      maxChildSize: AppDimens.userSheetMaxSize,
+      minChildSize: AppDimens.userSheetMinSize,
       expand: false,
       builder: (_, controller) {
         return Container(
           decoration: BoxDecoration(
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
+            borderRadius: const BorderRadius.vertical(
+                top: Radius.circular(AppDimens.radiusXLarge)),
             gradient: LinearGradient(
               colors: [
-                AppColors.primary.withValues(alpha: 0.95),
-                AppColors.primaryDark.withValues(alpha: 0.98),
+                AppColors.primary.withValues(alpha: AppDimens.alphaHigh),
+                AppColors.primaryDark.withValues(alpha: AppDimens.alphaHigh),
               ],
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
             ),
-            boxShadow: [
-              BoxShadow(
-                color: AppColors.shadow,
-                blurRadius: 12,
-                offset: const Offset(0, -3),
-              ),
-            ],
           ),
           child: SingleChildScrollView(
             controller: controller,
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 28),
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppDimens.paddingLarge,
+              vertical: AppDimens.paddingLarge,
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Container(
-                  width: 40,
-                  height: 5,
+                  width: AppDimens.dragHandleWidth,
+                  height: AppDimens.dragHandleHeight,
                   decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 0.4),
-                    borderRadius: BorderRadius.circular(12),
+                    color: AppColors.textPrimary.withValues(alpha: AppDimens.alphaLow),
+                    borderRadius: BorderRadius.circular(AppDimens.radiusSmall),
                   ),
                 ),
-                const SizedBox(height: 24),
+                const SizedBox(height: AppDimens.paddingLarge),
                 Container(
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     shape: BoxShape.circle,
-                    gradient: const LinearGradient(
+                    gradient: LinearGradient(
                       colors: [AppColors.primaryLight, AppColors.primary],
                     ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.3),
-                        blurRadius: 15,
-                        offset: const Offset(0, 5),
-                      ),
-                    ],
                   ),
-                  padding: const EdgeInsets.all(3),
+                  padding: const EdgeInsets.all(AppDimens.paddingExtraSmall),
                   child: CircleAvatar(
-                    radius: 50,
+                    radius: AppDimens.avatarRadiusLarge,
                     backgroundImage: NetworkImage(user.avatar),
+                    onBackgroundImageError: (_, __) {},
                   ),
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: AppDimens.paddingLarge),
                 Text(
                   '${user.firstName} ${user.lastName}',
                   style: const TextStyle(
                     color: AppColors.textPrimary,
-                    fontSize: 22,
+                    fontSize: AppDimens.textXLarge,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: AppDimens.paddingSmall),
                 Text(
                   user.email,
                   style: TextStyle(
-                    color: AppColors.textPrimary.withValues(alpha: 0.85),
-                    fontSize: 15,
+                    color: AppColors.textPrimary.withValues(alpha: AppDimens.alphaMedium),
+                    fontSize: AppDimens.textMedium,
                   ),
                 ),
-
-                const SizedBox(height: 24),
-                Divider(color: Colors.white.withValues(alpha: 0.25)),
-                const SizedBox(height: 24),
+                const SizedBox(height: AppDimens.paddingLarge),
+                Divider(color: AppColors.white.withValues(alpha: AppDimens.alphaBorder)),
+                const SizedBox(height: AppDimens.paddingLarge),
                 _infoTile(
-                  AppStrings.userId,
-                  user.id.toString(),
-                  Icons.badge_outlined,
-                ),
-                const SizedBox(height: 16),
+                    AppStrings.userId, user.id.toString(), Icons.badge_outlined),
+                const SizedBox(height: AppDimens.paddingMedium),
                 _infoTile(
-                  AppStrings.email,
-                  user.email,
-                  Icons.alternate_email_outlined,
-                ),
-                const SizedBox(height: 16),
+                    AppStrings.email, user.email, Icons.alternate_email_outlined),
+                const SizedBox(height: AppDimens.paddingMedium),
                 _infoTile(
-                  AppStrings.company,
-                  AppStrings.companyName,
-                  Icons.business_outlined,
-                ),
+                    AppStrings.company, AppStrings.companyName, Icons.business_outlined),
               ],
             ),
           ),
@@ -209,16 +184,19 @@ class _UserDetailSheet extends StatelessWidget {
 
   Widget _infoTile(String title, String value, IconData icon) {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+      padding: const EdgeInsets.symmetric(
+        vertical: AppDimens.paddingSmall,
+        horizontal: AppDimens.paddingMedium,
+      ),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.08),
-        borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
+        color: AppColors.white.withValues(alpha: AppDimens.alphaOverlay),
+        borderRadius: BorderRadius.circular(AppDimens.radiusMedium),
+        border: Border.all(color: AppColors.white.withValues(alpha: AppDimens.alphaBorder)),
       ),
       child: Row(
         children: [
-          Icon(icon, color: Colors.white70, size: 22),
-          const SizedBox(width: 14),
+          Icon(icon, color: Colors.white70, size: AppDimens.iconMedium),
+          const SizedBox(width: AppDimens.paddingMedium),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -226,17 +204,17 @@ class _UserDetailSheet extends StatelessWidget {
                 Text(
                   title,
                   style: TextStyle(
-                    color: Colors.white.withValues(alpha: 0.6),
-                    fontSize: 13,
+                    color: AppColors.white.withValues(alpha: AppDimens.alphaLow),
+                    fontSize: AppDimens.textSmall,
                   ),
                 ),
-                const SizedBox(height: 3),
+                const SizedBox(height: AppDimens.paddingExtraSmall),
                 Text(
                   value,
                   style: const TextStyle(
-                    color: Colors.white,
+                    color: AppColors.white,
                     fontWeight: FontWeight.w500,
-                    fontSize: 15,
+                    fontSize: AppDimens.textMedium,
                   ),
                 ),
               ],

@@ -101,7 +101,7 @@ class UserRepository {
     try {
       final box = await Hive.openBox('usersBox');
       await box.clear();
-      Logger.i('🗑️ Cache cleared');
+      Logger.i('Cache cleared');
     } catch (e) {
       Logger.i('Failed to clear cache: $e');
     }

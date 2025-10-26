@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:hipster_inc_assignment/utils/app_colors.dart';
 import '../routes/app_routes.dart';
 import '../utils/app_strings.dart';
+import '../utils/app_dimens.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -13,30 +15,30 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-      Future.delayed(const Duration(seconds: 2), () {
-        if (!mounted) return;
-        AppRoutes.navigateToLogin(context);
-      });
+    Future.delayed(Duration(seconds: AppDimens.durationMS), () {
+      if (!mounted) return;
+      AppRoutes.navigateToLogin(context);
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Image(
-              image: AssetImage('assets/app_icon.png'),
-              width: 120,
-              height: 120,
+              image: AssetImage(AppStrings.appLogo),
+              width: AppDimens.splashIconSize,
+              height: AppDimens.splashIconSize,
             ),
-            SizedBox(height: 16),
+            SizedBox(height: AppDimens.paddingMedium),
             Text(
               AppStrings.appName,
               style: TextStyle(
-                fontSize: 22,
+                fontSize: AppDimens.splashTextSize,
                 fontWeight: FontWeight.bold,
                 color: Colors.black87,
               ),

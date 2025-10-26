@@ -1,5 +1,6 @@
 class AppStrings {
   static const String appName = 'Video Call App';
+  static const String appLogoTag = 'Tag';
   static const String appLogo = "assets/app_icon.png";
 
   static const String welcomeBack = "Welcome Back";
@@ -118,13 +119,26 @@ class AppStrings {
   static String videoInitFailedWithError(dynamic error) =>
       '$videoInitFailed: $error';
 
-  static const joinPrompt = 'Enter Channel Name to Join';
-  static const joinButton = 'Join Channel';
-  static const waitingMessage = 'Waiting for others to join...';
-  static const readyMessage = 'Ready to start a call';
-  static const bothUsersHint = 'Both users must use the same channel name';
-  static const channelHint = 'e.g., room123';
+  static const pleaseEnterChannel = 'Please enter a channel';
+  static const joinPrompt = 'Join a Channel';
+  static const channelHint = 'Enter channel name';
+  static const joinButton = 'Join';
+  static const bothUsersHint = 'Both users must join the same channel to start a call';
+  static const waitingMessage = 'Waiting for other user...';
+  static const readyMessage = 'Ready to start call';
+  static const errorTitle = 'Oops! Something went wrong';
   static const retryButton = 'Retry';
-  static const errorTitle = 'Error';
-  static const pleaseEnterChannel = 'Please enter a channel name';
+  static const endCallTitle = 'End Call?';
+  static const endCallContent = 'Are you sure you want to end this call?';
+  static const cancelButton = 'Cancel';
+  static const endCallButton = 'End Call';
+  static const screenSharingStarted = 'Screen sharing started';
+  static const screenSharingStopped = 'Screen sharing stopped';
+  static const callEndedByOther = 'Call ended by other participant';
+  static const sharing = 'Sharing';
+  static const screenSharingActive = 'Screen sharing active';
+  static const channelPrefix = 'Channel: ';
+  static const testNotification = 'Test Notification: ';
+
+  static const String fileExtension = ".env";
 }

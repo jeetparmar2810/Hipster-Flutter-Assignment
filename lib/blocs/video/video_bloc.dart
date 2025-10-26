@@ -17,13 +17,11 @@ class VideoBloc extends Bloc<VideoEvent, VideoState> {
     on<LeaveChannel>(_onLeaveChannel);
     on<UpdateVideoState>(_onUpdateVideoState);
     on<VideoErrorEvent>(_onVideoError);
-
     on<StartScreenShare>(_onStartScreenShare);
     on<StopScreenShare>(_onStopScreenShare);
     on<ToggleScreenShare>(_onToggleScreenShare);
     on<ScreenShareStateChanged>(_onScreenShareStateChanged);
 
-    // Setup callbacks from AgoraService
     _agoraService.onUserJoined = (uid) {
       Logger.i('Bloc: Remote user joined - $uid');
       add(RemoteUserJoined(uid));
@@ -43,7 +41,6 @@ class VideoBloc extends Bloc<VideoEvent, VideoState> {
       Logger.e('Bloc: Error occurred', error);
       add(VideoErrorEvent(error));
     };
-
     _agoraService.onScreenShareStateChanged = (isSharing) {
       Logger.i('Bloc: Screen share state changed: $isSharing');
       add(ScreenShareStateChanged(isSharing));
@@ -59,6 +56,8 @@ class VideoBloc extends Bloc<VideoEvent, VideoState> {
         VideoReady(
           localVideoWidget: _agoraService.getLocalVideoWidget(),
           hasRemoteUser: false,
+          isScreenSharing: false,
+          channelName: null,
         ),
       );
       Logger.i('Bloc: Video initialized successfully');
@@ -69,9 +68,9 @@ class VideoBloc extends Bloc<VideoEvent, VideoState> {
   }
 
   Future<void> _onJoinChannel(
-    JoinChannel event,
-    Emitter<VideoState> emit,
-  ) async {
+      JoinChannel event,
+      Emitter<VideoState> emit,
+      ) async {
     Logger.i('Bloc: Joining channel ${event.channelName}...');
     emit(VideoLoading());
     try {
@@ -95,25 +94,25 @@ class VideoBloc extends Bloc<VideoEvent, VideoState> {
   }
 
   Future<void> _onToggleAudio(
-    ToggleAudioEvent event,
-    Emitter<VideoState> emit,
-  ) async {
+      ToggleAudioEvent event,
+      Emitter<VideoState> emit,
+      ) async {
     Logger.i('Bloc: Toggling audio - ${event.enabled}');
     await _agoraService.toggleAudio(event.enabled);
   }
 
   Future<void> _onToggleVideo(
-    ToggleVideoEvent event,
-    Emitter<VideoState> emit,
-  ) async {
+      ToggleVideoEvent event,
+      Emitter<VideoState> emit,
+      ) async {
     Logger.i('Bloc: Toggling video - ${event.enabled}');
     await _agoraService.toggleVideo(event.enabled);
   }
 
   Future<void> _onLeaveChannel(
-    LeaveChannel event,
-    Emitter<VideoState> emit,
-  ) async {
+      LeaveChannel event,
+      Emitter<VideoState> emit,
+      ) async {
     Logger.i('Bloc: Leaving channel...');
     await _agoraService.leaveChannel();
     emit(VideoInitial());
@@ -178,7 +177,6 @@ class VideoBloc extends Bloc<VideoEvent, VideoState> {
     _emitReadyState(emit);
   }
 
-  // SINGLE _emitReadyState method - with emit parameter
   void _emitReadyState(Emitter<VideoState> emit) {
     emit(
       VideoReady(
@@ -192,7 +190,6 @@ class VideoBloc extends Bloc<VideoEvent, VideoState> {
       ),
     );
   }
-
 
   @override
   Future<void> close() {

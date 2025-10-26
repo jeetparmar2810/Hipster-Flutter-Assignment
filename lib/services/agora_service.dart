@@ -13,12 +13,17 @@ class AgoraService {
   String? currentChannel;
   bool isScreenSharing = false;
 
+  // External camera support - empty for mobile
+  List<dynamic> availableCameras = [];
+  String? currentCameraId;
+
   Function(int uid)? onUserJoined;
   Function(int uid)? onUserLeft;
   Function()? onLocalUserJoined;
   Function(String error)? onError;
   Function()? onCallEnded;
   Function(bool isSharing)? onScreenShareStateChanged;
+  Function(List<dynamic> cameras)? onCamerasUpdated;
 
   Future<void> initialize() async {
     Logger.i('Initializing Agora...');
@@ -48,6 +53,9 @@ class AgoraService {
       _registerEventHandlers();
 
       await _engine!.enableVideo();
+
+      Logger.i('Platform: Mobile - using standard camera switching');
+
       await _engine!.startPreview();
 
       Logger.i('Video enabled and preview started');
@@ -56,6 +64,15 @@ class AgoraService {
       onError?.call('Initialization failed: $e');
       rethrow;
     }
+  }
+
+  Future<void> switchToExternalCamera(String deviceId) async {
+    Logger.i('External camera switching not supported on mobile');
+    throw UnsupportedError('External camera switching only available on desktop');
+  }
+
+  Future<void> refreshCameraList() async {
+    Logger.i('Camera list refresh not needed on mobile');
   }
 
   void _registerEventHandlers() {
@@ -71,8 +88,7 @@ class AgoraService {
           this.remoteUid = remoteUid;
           onUserJoined?.call(remoteUid);
         },
-        onUserOffline:
-            (
+        onUserOffline: (
             RtcConnection connection,
             int remoteUid,
             UserOfflineReasonType reason,
@@ -103,8 +119,7 @@ class AgoraService {
           Logger.i('Agora Error: $err - $msg');
           onError?.call('Error $err: $msg');
         },
-        onConnectionStateChanged:
-            (
+        onConnectionStateChanged: (
             RtcConnection connection,
             ConnectionStateType state,
             ConnectionChangedReasonType reason,
@@ -163,7 +178,6 @@ class AgoraService {
       return;
     }
     try {
-      // Stop screen sharing if active
       if (isScreenSharing) {
         await stopScreenShare();
       }
@@ -204,10 +218,8 @@ class AgoraService {
     try {
       Logger.i('Starting screen share...');
 
-      // Stop camera track when starting screen share
       await _engine!.muteLocalVideoStream(true);
 
-      // Start screen capture
       await _engine!.startScreenCapture(
         const ScreenCaptureParameters2(
           captureAudio: true,
@@ -215,7 +227,6 @@ class AgoraService {
         ),
       );
 
-      // Update channel media options to publish screen track
       await _engine!.updateChannelMediaOptions(
         const ChannelMediaOptions(
           publishScreenTrack: true,
@@ -243,13 +254,9 @@ class AgoraService {
     try {
       Logger.i('Stopping screen share...');
 
-      // Stop screen capture
       await _engine!.stopScreenCapture();
-
-      // Resume camera track
       await _engine!.muteLocalVideoStream(false);
 
-      // Update channel media options to publish camera track
       await _engine!.updateChannelMediaOptions(
         const ChannelMediaOptions(
           publishScreenTrack: false,
@@ -282,7 +289,6 @@ class AgoraService {
       return const Center(child: CircularProgressIndicator());
     }
 
-    // When screen sharing, show screen capture
     if (isScreenSharing) {
       return AgoraVideoView(
         controller: VideoViewController(
@@ -295,7 +301,6 @@ class AgoraService {
       );
     }
 
-    // Normal camera view
     return AgoraVideoView(
       controller: VideoViewController(
         rtcEngine: _engine!,

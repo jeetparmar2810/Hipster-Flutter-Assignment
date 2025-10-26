@@ -11,8 +11,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<LoginRequested>((event, emit) async {
       emit(AuthLoading());
       try {
-        final ok = await repository.login(event.email, event.password);
-        if (ok) {
+        final success = await repository.login(event.email, event.password);
+        if (success) {
           emit(AuthSuccess());
         } else {
           emit(AuthFailure(AppStrings.invalidCredentials));

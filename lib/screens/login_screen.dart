@@ -1,12 +1,12 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import '../blocs/auth/auth_bloc.dart';
 import '../blocs/auth/auth_event.dart';
 import '../blocs/auth/auth_state.dart';
 import '../utils/app_colors.dart';
 import '../utils/app_strings.dart';
+import '../utils/app_dimens.dart';
 import '../utils/loader/loading_dialog.dart';
 import '../widgets/custom_text_field.dart';
 
@@ -25,10 +25,12 @@ class _LoginScreenState extends State<LoginScreen>
   late AnimationController _animationController;
 
   void _onLogin() {
-    if (_formKey.currentState!.validate()) {
-      // Use context.read<AuthBloc>() to dispatch login event
+    if (_formKey.currentState?.validate() ?? false) {
       context.read<AuthBloc>().add(
-        LoginRequested(_emailCtrl.text.trim(), _passwordCtrl.text.trim()),
+        LoginRequested(
+          _emailCtrl.text.trim(),
+          _passwordCtrl.text.trim(),
+        ),
       );
     }
   }
@@ -38,7 +40,7 @@ class _LoginScreenState extends State<LoginScreen>
     super.initState();
     _animationController = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 2),
+      duration: Duration(seconds: AppDimens.durationMS),
     )..repeat(reverse: true);
   }
 
@@ -52,7 +54,6 @@ class _LoginScreenState extends State<LoginScreen>
 
   @override
   Widget build(BuildContext context) {
-    // Wrap Scaffold in BlocListener to handle login states
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
         if (state is AuthLoading) {
@@ -61,13 +62,14 @@ class _LoginScreenState extends State<LoginScreen>
           LoadingDialog.hide(context);
         }
 
-        if (state is AuthSuccess) {
-          if (!mounted) return;
-          Navigator.pushReplacementNamed(context, AppStrings.videoCallRoute);
+        if (state is AuthSuccess && mounted) {
+          Navigator.pushReplacementNamed(
+            context,
+            AppStrings.videoCallRoute,
+          );
         }
 
-        if (state is AuthFailure) {
-          if (!mounted) return;
+        if (state is AuthFailure && mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(state.error),
@@ -81,7 +83,6 @@ class _LoginScreenState extends State<LoginScreen>
         resizeToAvoidBottomInset: true,
         body: Stack(
           children: [
-            // Background gradient animation
             AnimatedBuilder(
               animation: _animationController,
               builder: (context, _) {
@@ -96,71 +97,75 @@ class _LoginScreenState extends State<LoginScreen>
                           AppColors.primary,
                           AppColors.primaryLight,
                           t,
-                        )!,
+                        ) ??
+                            AppColors.primary,
                         Color.lerp(
                           AppColors.primaryLight,
                           AppColors.primary,
                           t,
-                        )!,
+                        ) ??
+                            AppColors.primaryLight,
                       ],
                     ),
                   ),
                 );
               },
             ),
-            Container(color: Colors.white.withValues(alpha: 0.05)),
+            Container(color: AppColors.white.withValues(alpha: AppDimens.alphaZeroFive)),
             Center(
               child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(horizontal: 24),
+                padding: const EdgeInsets.symmetric(
+                    horizontal: AppDimens.paddingLarge),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Hero(
-                      tag: 'app_logo',
+                      tag: AppStrings.appLogoTag,
                       child: Image.asset(
                         AppStrings.appLogo,
-                        height: 110,
-                        width: 110,
+                        height: AppDimens.logoSize,
+                        width: AppDimens.logoSize,
                       ),
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: AppDimens.paddingLarge),
                     const Text(
                       AppStrings.welcomeBack,
                       style: TextStyle(
                         color: AppColors.textPrimary,
-                        fontSize: 28,
+                        fontSize: AppDimens.textXLarge,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    const SizedBox(height: 6),
+                    const SizedBox(height: AppDimens.paddingExtraSmall),
                     Text(
                       AppStrings.signInSubtitle,
                       style: TextStyle(
-                        color: AppColors.textPrimary.withValues(alpha: 0.8),
-                        fontSize: 16,
+                        color:
+                        AppColors.textPrimary.withValues(alpha: AppDimens.alphaMedium),
+                        fontSize: AppDimens.textMedium,
                       ),
                     ),
-                    const SizedBox(height: 40),
+                    const SizedBox(height: AppDimens.paddingXLarge),
                     ClipRRect(
-                      borderRadius: BorderRadius.circular(25),
+                      borderRadius:
+                      BorderRadius.circular(AppDimens.radiusXLarge),
                       child: BackdropFilter(
-                        filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
+                        filter: ImageFilter.blur(sigmaX: AppDimens.blurRadius, sigmaY: AppDimens.blurRadius),
                         child: Container(
-                          padding: const EdgeInsets.all(24),
-                          width: 400,
+                          padding: EdgeInsets.all(AppDimens.paddingLarge),
+                          width: AppDimens.width,
                           decoration: BoxDecoration(
-                            color: AppColors.surfaceLight.withValues(
-                              alpha: 0.12,
-                            ),
-                            borderRadius: BorderRadius.circular(25),
+                            color: AppColors.surfaceLight.withValues(alpha: AppDimens.alphaBorder),
+                            borderRadius:
+                            BorderRadius.circular(AppDimens.radiusXLarge),
                             border: Border.all(
-                              color: Colors.white.withValues(alpha: 0.7),
+                              color: AppColors.white.withValues(alpha: AppDimens.alphaMedium),
                             ),
-                            boxShadow: const [
+                            boxShadow: [
                               BoxShadow(
                                 color: Colors.black26,
-                                blurRadius: 20,
-                                offset: Offset(0, 2),
+                                blurRadius: AppDimens.blurRadius,
+                                offset: AppDimens.shadowSmall,
                               ),
                             ],
                           ),
@@ -184,7 +189,7 @@ class _LoginScreenState extends State<LoginScreen>
                                     return null;
                                   },
                                 ),
-                                const SizedBox(height: 16),
+                                const SizedBox(height: AppDimens.paddingMedium),
                                 AppTextField(
                                   controller: _passwordCtrl,
                                   label: AppStrings.passwordLabel,
@@ -197,16 +202,16 @@ class _LoginScreenState extends State<LoginScreen>
                                     return null;
                                   },
                                 ),
-                                const SizedBox(height: 32),
+                                const SizedBox(height: AppDimens.paddingXLarge),
                                 SizedBox(
                                   width: double.infinity,
                                   child: ElevatedButton(
                                     style: ElevatedButton.styleFrom(
                                       padding: const EdgeInsets.symmetric(
-                                        vertical: 14,
-                                      ),
+                                          vertical: AppDimens.paddingMedium),
                                       shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(14),
+                                        borderRadius: BorderRadius.circular(
+                                            AppDimens.radiusMedium),
                                       ),
                                       backgroundColor: AppColors.primary,
                                     ),
@@ -214,14 +219,14 @@ class _LoginScreenState extends State<LoginScreen>
                                     child: const Text(
                                       AppStrings.loginButton,
                                       style: TextStyle(
-                                        fontSize: 18,
+                                        fontSize: AppDimens.textLarge,
                                         fontWeight: FontWeight.w600,
-                                        color: Colors.white,
+                                        color: AppColors.white,
                                       ),
                                     ),
                                   ),
                                 ),
-                                const SizedBox(height: 16),
+                                const SizedBox(height: AppDimens.paddingMedium),
                                 TextButton(
                                   onPressed: () {
                                     Navigator.pushNamed(
@@ -232,9 +237,8 @@ class _LoginScreenState extends State<LoginScreen>
                                   child: Text(
                                     AppStrings.viewUsers,
                                     style: TextStyle(
-                                      color: AppColors.textPrimary.withValues(
-                                        alpha: 0.8,
-                                      ),
+                                      color: AppColors.textPrimary
+                                          .withValues(alpha: AppDimens.alphaMedium),
                                       fontWeight: FontWeight.w500,
                                     ),
                                   ),
@@ -245,7 +249,7 @@ class _LoginScreenState extends State<LoginScreen>
                         ),
                       ),
                     ),
-                    const SizedBox(height: 50),
+                    const SizedBox(height: AppDimens.paddingXXLarge),
                   ],
                 ),
               ),
