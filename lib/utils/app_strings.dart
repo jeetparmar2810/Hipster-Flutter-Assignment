@@ -16,6 +16,8 @@ class AppStrings {
   static const String passwordRequired = "Please enter your password";
   static const String loginButton = "LOGIN";
   static const String viewUsers = "View Users";
+  static const String view = "View";
+  static const String testUser = "Test User";
   static const String loginTitle = 'Welcome Back';
   static const String loginSubtitle = 'Sign in to continue';
   static const String emailHint = 'Enter your email';
@@ -139,6 +141,8 @@ class AppStrings {
   static const screenSharingActive = 'Screen sharing active';
   static const channelPrefix = 'Channel: ';
   static const testNotification = 'Test Notification: ';
+  static const incomingCallFrom = 'Incoming call from: ';
+  static const String inComingCall = 'Incoming Video Call ';
 
   static const String fileExtension = ".env";
 }

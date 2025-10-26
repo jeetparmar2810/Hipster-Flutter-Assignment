@@ -13,7 +13,6 @@ class AgoraService {
   String? currentChannel;
   bool isScreenSharing = false;
 
-  // External camera support - empty for mobile
   List<dynamic> availableCameras = [];
   String? currentCameraId;
 

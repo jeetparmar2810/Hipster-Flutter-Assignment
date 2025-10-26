@@ -102,6 +102,38 @@ flutter run
 
 ---
 
+## 🧾 Assumptions & Limitations
+
+### 🔹 Assumptions
+1. **No backend server** is connected yet — user login is local only.
+2. **Same credentials** can be used on multiple devices for testing purposes.
+3. Both users must **enter the same channel name** to join the same video room.
+   - Example:
+      - Device 1 → `channel: demoRoom01`
+      - Device 2 → `channel: demoRoom01`  
+        ✅ Both devices connect to the same call.
+
+---
+
+### 🔹 Limitations
+1. ❌ No real authentication or user identification (shared login).
+2. ❌ No server-generated Agora token (uses static token or empty for dev mode).
+3. ❌ No real-time call invitation or push notification yet.
+4. ❌ If two users use different channel names, they will not connect.
+5. ❌ When one user ends the call, the other will remain connected unless they end it manually.
+
+---
+
+## 🧩 Testing Steps
+
+1. **Run the app** on two devices or emulators.
+2. **Login** using the same credentials on both devices.
+3. **Enter identical channel names** (e.g., `demoCall01`) on both.
+4. Tap **Join Channel** → both should connect in a one-to-one video call.
+5. # Tap **Back** or **End Call** → both should return to the **Login Screen**.
+
+
+
 ## 🖼️ Screenshots
 
 <div style="display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;">

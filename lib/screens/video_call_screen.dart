@@ -4,13 +4,13 @@ import '../blocs/video/video_bloc.dart';
 import '../blocs/video/video_event.dart';
 import '../blocs/video/video_state.dart';
 import '../services/agora_service.dart';
-import '../services/push_notification_service.dart';
 import '../utils/app_loader.dart';
 import '../utils/app_colors.dart';
 import '../utils/app_strings.dart';
 import '../utils/app_dimens.dart';
 import '../utils/app_text_styles.dart';
 import '../utils/logger.dart';
+import '../routes/app_routes.dart';
 
 class VideoCallScreen extends StatefulWidget {
   final String? channelName;
@@ -24,7 +24,6 @@ class VideoCallScreen extends StatefulWidget {
 class _VideoCallScreenState extends State<VideoCallScreen> {
   late AgoraService _service;
   late VideoBloc _videoBloc;
-  final PushNotificationService _notificationService = PushNotificationService();
 
   bool audioEnabled = true;
   bool videoEnabled = true;
@@ -41,7 +40,6 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
     _videoBloc = VideoBloc(_service)..add(InitVideo());
 
     _setupCallEndCallback();
-    _setupNotifications();
 
     if (widget.channelName != null) {
       _currentChannel = widget.channelName;
@@ -61,61 +59,6 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
     };
   }
 
-  Future<void> _setupNotifications() async {
-    try {
-      await _notificationService.initialize();
-      await _notificationService.requestPermissions();
-
-      _notificationService.onIncomingCall = (callData) {
-        if (mounted && _currentChannel == null) {
-          _notificationService.showIncomingCallNotification(context, callData);
-        } else if (mounted && _currentChannel != null) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('Incoming call from ${callData.callerName}'),
-              duration: Duration(seconds: AppDimens.durationVideoCallMS),
-              action: SnackBarAction(
-                label: 'View',
-                onPressed: () {
-                  _notificationService.showIncomingCallNotification(context, callData);
-                },
-              ),
-            ),
-          );
-        }
-      };
-
-      _notificationService.onNotificationTapped = (notificationId) {
-        try {
-          final callData = _notificationService.getCallHistory().lastWhere(
-                (call) => call.notificationId == notificationId,
-          );
-
-          if (mounted) {
-            setState(() {
-              _currentChannel = callData.channelName;
-              _channelController.text = callData.channelName;
-            });
-            _joinChannel();
-          }
-        } catch (e) {
-          Logger.e('Error handling notification tap', e);
-          if (mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Failed to join call from notification'),
-                backgroundColor: AppColors.error,
-              ),
-            );
-          }
-        }
-      };
-
-      Logger.i('Notifications setup complete');
-    } catch (e) {
-      Logger.e('Failed to setup notifications', e);
-    }
-  }
 
   @override
   void dispose() {
@@ -200,19 +143,6 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
     }
   }
 
-  Future<void> _testNotification() async {
-    final testChannel = _channelController.text.trim().isEmpty
-        ? 'test_channel_${DateTime.now().millisecondsSinceEpoch}'
-        : _channelController.text.trim();
-
-    await _notificationService.simulateIncomingCall(
-      callerName: 'Test User',
-      callerId: 'test_${DateTime.now().millisecondsSinceEpoch}',
-      channelName: testChannel,
-    );
-
-    Logger.i('Test notification sent for channel: $testChannel');
-  }
 
   Future<void> _endCall({bool isRemoteInitiated = false}) async {
     if (_isCallEnded) return;
@@ -243,8 +173,9 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
       await Future.delayed(
           Duration(milliseconds: AppDimens.durationLongVideoCallMS));
     }
+
     if (!mounted) return;
-    Navigator.of(context).popUntil((route) => route.isFirst);
+    AppRoutes.navigateToLogin(context);
   }
 
   Future<bool> _showEndCallDialog() async {
@@ -300,13 +231,6 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
               icon: const Icon(Icons.arrow_back, color: AppColors.textWhite),
               onPressed: () => _showEndCallDialog(),
             ),
-            actions: [
-              IconButton(
-                icon: const Icon(Icons.notification_add, color: AppColors.textWhite),
-                onPressed: _testNotification,
-                tooltip: AppStrings.testNotification,
-              ),
-            ],
           ),
           body: Container(
             decoration: const BoxDecoration(
