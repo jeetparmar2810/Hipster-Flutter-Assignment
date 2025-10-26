@@ -130,7 +130,7 @@ flutter run
 2. **Login** using the same credentials on both devices.
 3. **Enter identical channel names** (e.g., `demoCall01`) on both.
 4. Tap **Join Channel** → both should connect in a one-to-one video call.
-5. # Tap **Back** or **End Call** → both should return to the **Login Screen**.
+5. Tap **Back** or **End Call** → both should return to the **Login Screen**.
 
 
 
