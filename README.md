@@ -93,7 +93,7 @@ flutter run
 
 1. Create an **Agora developer account**
 2. Generate **App ID**
-3. Add **App ID** in `agora_service.dart`
+3. Add **App ID** in `.env file`
 4. Run on **two devices/emulators** to test one-to-one video calls
 5. Ensure camera & microphone permissions are added in:
 
@@ -196,7 +196,8 @@ Contributions are welcome!
 
 ## 📄 License
 
-This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.
+This project was developed as part of a Flutter assessment.  
+It is intended for evaluation and demonstration purposes only.
 
 ---
 
