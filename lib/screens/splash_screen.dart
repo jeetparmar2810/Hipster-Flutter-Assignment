@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:hipster_inc_assignment/utils/app_colors.dart';
+
 import '../routes/app_routes.dart';
-import '../utils/app_strings.dart';
 import '../utils/app_dimens.dart';
+import '../utils/app_strings.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});

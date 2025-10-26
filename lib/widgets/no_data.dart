@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hipster_inc_assignment/utils/app_strings.dart';
+
 import '../utils/app_colors.dart';
 import '../utils/app_dimens.dart';
 

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../models/user_model.dart';
 import '../utils/app_colors.dart';
 import '../utils/app_dimens.dart';

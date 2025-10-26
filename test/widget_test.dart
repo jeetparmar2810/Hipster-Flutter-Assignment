@@ -1,5 +1,5 @@
-import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:hipster_inc_assignment/app.dart';
 import 'package:hipster_inc_assignment/blocs/auth/auth_bloc.dart';
 import 'package:hipster_inc_assignment/repositories/auth_repository.dart';

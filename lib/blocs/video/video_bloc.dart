@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import '../../services/agora_service.dart';
 import '../../utils/logger.dart';
 import 'video_event.dart';

@@ -112,6 +112,7 @@ flutter run
       - Device 1 → `channel: demoRoom01`
       - Device 2 → `channel: demoRoom01`  
         ✅ Both devices connect to the same call.
+4. **Internet connection** is required for video calls — Agora uses cloud-based real-time communication.     
 
 ---
 

@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hipster_inc_assignment/utils/network/network_utils.dart';
+import 'package:hipster_inc_assignment/widgets/video_screen_widget/export.dart';
+
 import '../blocs/video/video_bloc.dart';
 import '../blocs/video/video_event.dart';
 import '../blocs/video/video_state.dart';
+import '../routes/app_routes.dart';
 import '../services/agora_service.dart';
-import '../utils/app_loader.dart';
 import '../utils/app_colors.dart';
-import '../utils/app_strings.dart';
 import '../utils/app_dimens.dart';
+import '../utils/app_loader.dart';
+import '../utils/app_strings.dart';
 import '../utils/app_text_styles.dart';
 import '../utils/logger.dart';
-import '../routes/app_routes.dart';
 
 class VideoCallScreen extends StatefulWidget {
   final String? channelName;
@@ -59,7 +62,6 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
     };
   }
 
-
   @override
   void dispose() {
     if (!_isCallEnded) {
@@ -71,7 +73,30 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
     super.dispose();
   }
 
+  void _showNetworkError() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(AppStrings.noInternet),
+        backgroundColor: AppColors.error,
+        duration: Duration(seconds: AppDimens.duration5MS),
+      ),
+    );
+  }
+
+  Future<bool> _checkNetwork() async {
+    final hasInternet = await NetworkUtils.hasInternet();
+    if (!hasInternet && mounted) {
+      _showNetworkError();
+      return false;
+    }
+    return true;
+  }
+
   Future<void> _joinChannel() async {
+    if (!await _checkNetwork()) {
+      return;
+    }
+
     final channel = _channelController.text.trim();
 
     if (channel.isEmpty) {
@@ -117,6 +142,10 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
   }
 
   Future<void> _toggleScreenShare() async {
+    if (!await _checkNetwork()) {
+      return;
+    }
+
     try {
       _videoBloc.add(ToggleScreenShare());
       if (!mounted) return;
@@ -142,7 +171,6 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
       );
     }
   }
-
 
   Future<void> _endCall({bool isRemoteInitiated = false}) async {
     if (_isCallEnded) return;
@@ -186,17 +214,19 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
       builder: (context) => AlertDialog(
         backgroundColor: AppColors.backgroundDark,
         title: const Text(AppStrings.endCallTitle, style: AppTextStyles.title),
-        content: const Text(AppStrings.endCallContent, style: AppTextStyles.body),
+        content:
+        const Text(AppStrings.endCallContent, style: AppTextStyles.body),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text(AppStrings.cancelButton, style: AppTextStyles.body),
+            child:
+            const Text(AppStrings.cancelButton, style: AppTextStyles.body),
           ),
           ElevatedButton(
             onPressed: () => Navigator.pop(context, true),
-            style:
-            ElevatedButton.styleFrom(backgroundColor: AppColors.error),
-            child: const Text(AppStrings.endCallButton, style: AppTextStyles.button),
+            style: ElevatedButton.styleFrom(backgroundColor: AppColors.error),
+            child: const Text(AppStrings.endCallButton,
+                style: AppTextStyles.button),
           ),
         ],
       ),
@@ -222,72 +252,57 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
         },
         child: Scaffold(
           extendBodyBehindAppBar: true,
-          appBar: AppBar(
-            backgroundColor: Colors.transparent,
-            centerTitle: true,
-            title:
-            const Text(AppStrings.videoCallTitle, style: AppTextStyles.title),
-            leading: IconButton(
-              icon: const Icon(Icons.arrow_back, color: AppColors.textWhite),
-              onPressed: () => _showEndCallDialog(),
-            ),
-          ),
-          body: Container(
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                colors: AppColors.gradient,
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
-            ),
-            child: SafeArea(
-              child: Column(
-                children: [
-                  Expanded(
-                    child: BlocBuilder<VideoBloc, VideoState>(
-                      builder: (context, state) {
-                        if (state is VideoLoading) {
-                          return const Center(child: AppLoader());
-                        }
-                        if (state is VideoError) {
-                          return _buildErrorState(state.message);
-                        }
-                        if (state is VideoReady) {
-                          return _buildVideoLayout(state);
-                        }
-                        return const SizedBox();
-                      },
-                    ),
-                  ),
-                  _buildControls(context),
-                ],
-              ),
-            ),
-          ),
+          appBar: _buildAppBar(),
+          body: _buildBody(),
         ),
       ),
     );
   }
 
-  Widget _buildErrorState(String message) {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(AppDimens.paddingVideoCallLarge),
+  AppBar _buildAppBar() {
+    return AppBar(
+      backgroundColor: Colors.transparent,
+      centerTitle: true,
+      title: const Text(AppStrings.videoCallTitle, style: AppTextStyles.title),
+      leading: IconButton(
+        icon: const Icon(Icons.arrow_back, color: AppColors.textWhite),
+        onPressed: () => _showEndCallDialog(),
+      ),
+    );
+  }
+
+  Widget _buildBody() {
+    return Container(
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          colors: AppColors.gradient,
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+      ),
+      child: SafeArea(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.error_outline,
-                size: AppDimens.iconXXLargeVideoCall, color: AppColors.error),
-            const SizedBox(height: AppDimens.marginVideoCallMedium),
-            const Text(AppStrings.errorTitle, style: AppTextStyles.title),
-            const SizedBox(height: AppDimens.marginVideoCallSmall),
-            Text(message, textAlign: TextAlign.center, style: AppTextStyles.body),
-            const SizedBox(height: AppDimens.marginVideoCallMedium),
-            ElevatedButton(
-              onPressed: () => _videoBloc.add(InitVideo()),
-              style: ElevatedButton.styleFrom(backgroundColor: AppColors.primary),
-              child: const Text(AppStrings.retryButton, style: AppTextStyles.button),
+            Expanded(
+              child: BlocBuilder<VideoBloc, VideoState>(
+                builder: (context, state) {
+                  if (state is VideoLoading) {
+                    return const Center(child: AppLoader());
+                  }
+                  if (state is VideoError) {
+                    return VideoErrorWidget(
+                      message: state.message,
+                      onRetry: () => _videoBloc.add(InitVideo()),
+                    );
+                  }
+                  if (state is VideoReady) {
+                    return _buildVideoLayout(state);
+                  }
+                  return const SizedBox();
+                },
+              ),
             ),
+            _buildControls(context),
           ],
         ),
       ),
@@ -300,120 +315,14 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
         Positioned.fill(
           child: state.hasRemoteUser && state.remoteVideoWidget != null
               ? state.remoteVideoWidget!
-              : _buildWaitingScreen(),
+              : VideoWaitingScreen(currentChannel: _currentChannel),
         ),
-        Positioned(
-          top: AppDimens.positionVideoCallTop,
-          right: AppDimens.positionVideoCallRight,
-          width: AppDimens.videoPreviewWidth,
-          height: AppDimens.videoPreviewHeight,
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(AppDimens.radiusMediumVideoCall),
-            child: Container(
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: AppColors.textWhite.withValues(alpha: AppDimens.alphaBorderVideoCall),
-                  width: AppDimens.borderWidthVideoCall,
-                ),
-                borderRadius: BorderRadius.circular(AppDimens.radiusMediumVideoCall),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: AppDimens.alphaShadowVideoCall),
-                    blurRadius: AppDimens.blurRadiusVideoCall,
-                  ),
-                ],
-              ),
-              child: Stack(
-                children: [
-                  (videoEnabled || state.isScreenSharing)
-                      ? state.localVideoWidget
-                      : Container(
-                    color: Colors.black87,
-                    child: const Center(
-                      child: Icon(
-                        Icons.videocam_off,
-                        color: AppColors.textMuted,
-                        size: AppDimens.iconMediumVideoCall,
-                      ),
-                    ),
-                  ),
-                  if (state.isScreenSharing)
-                    Positioned(
-                      bottom: AppDimens.positionVideoCallBottom,
-                      left: AppDimens.positionVideoCallLeft,
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: AppDimens.paddingVideoCallSmall,
-                          vertical: AppDimens.paddingVideoCallTiny,
-                        ),
-                        decoration: BoxDecoration(
-                          color: AppColors.primary,
-                          borderRadius: BorderRadius.circular(AppDimens.radiusTinyVideoCall),
-                        ),
-                        child: const Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Icon(Icons.screen_share,
-                                size: AppDimens.iconTinyVideoCall, color: Colors.black),
-                            SizedBox(width: AppDimens.marginVideoCallTiny),
-                            Text(AppStrings.sharing,
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: AppDimens.textTinyVideoCall,
-                                  fontWeight: FontWeight.bold,
-                                )),
-                          ],
-                        ),
-                      ),
-                    ),
-                ],
-              ),
-            ),
-          ),
+        VideoPreviewWidget(
+          localVideoWidget: state.localVideoWidget,
+          videoEnabled: videoEnabled,
+          isScreenSharing: state.isScreenSharing,
         ),
       ],
-    );
-  }
-
-  Widget _buildWaitingScreen() {
-    return Container(
-      color: AppColors.backgroundDark,
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            if (_currentChannel != null) ...[
-              const AppLoader(),
-              const SizedBox(height: AppDimens.marginVideoCallMedium),
-              const Text(AppStrings.waitingMessage, style: AppTextStyles.body),
-              const SizedBox(height: AppDimens.marginVideoCallSmall),
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: AppDimens.paddingVideoCallLarge,
-                  vertical: AppDimens.paddingVideoCallMedium,
-                ),
-                decoration: BoxDecoration(
-                  color: AppColors.textWhite.withValues(alpha: AppDimens.alphaLowVideoCall),
-                  borderRadius: BorderRadius.circular(AppDimens.radiusLargeVideoCall),
-                ),
-                child: Text(
-                  '${AppStrings.channelPrefix}$_currentChannel',
-                  style: const TextStyle(
-                    color: AppColors.textWhite,
-                    fontSize: AppDimens.textLargeVideoCall,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ] else ...[
-              const Icon(Icons.video_call,
-                  size: AppDimens.iconXXLargeVideoCall, color: AppColors.textMuted),
-              const SizedBox(height: AppDimens.marginVideoCallMedium),
-              const Text(AppStrings.readyMessage, style: AppTextStyles.body),
-            ],
-          ],
-        ),
-      ),
     );
   }
 
@@ -427,68 +336,26 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
               horizontal: AppDimens.paddingVideoCallLarge,
               vertical: AppDimens.paddingVideoCallMedium),
           decoration: BoxDecoration(
-            color: Colors.black.withValues(alpha: AppDimens.alphaControlBackgroundVideoCall),
-            borderRadius:
-            const BorderRadius.vertical(top: Radius.circular(AppDimens.radiusTopVideoCall)),
+            color: Colors.black
+                .withValues(alpha: AppDimens.alphaControlBackgroundVideoCall),
+            borderRadius: const BorderRadius.vertical(
+                top: Radius.circular(AppDimens.radiusTopVideoCall)),
           ),
           child: Column(
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  _controlButton(
-                    icon: audioEnabled ? Icons.mic : Icons.mic_off,
-                    color: audioEnabled ? AppColors.textWhite : AppColors.error,
-                    onTap: () {
-                      setState(() => audioEnabled = !audioEnabled);
-                      _service.toggleAudio(audioEnabled);
-                      _videoBloc.add(ToggleAudioEvent(audioEnabled));
-                    },
-                  ),
-                  const SizedBox(width: AppDimens.marginVideoCallMedium),
-                  _controlButton(
-                    icon: videoEnabled ? Icons.videocam : Icons.videocam_off,
-                    color: videoEnabled ? AppColors.textWhite : AppColors.error,
-                    onTap: isScreenSharing
-                        ? null
-                        : () {
-                      setState(() => videoEnabled = !videoEnabled);
-                      _service.toggleVideo(videoEnabled);
-                      _videoBloc.add(ToggleVideoEvent(videoEnabled));
-                    },
-                  ),
-                  const SizedBox(width: AppDimens.marginVideoCallMedium),
-                  _controlButton(
-                    icon: Icons.switch_camera,
-                    color: AppColors.textWhite,
-                    onTap: isScreenSharing ? null : _switchCamera,
-                  ),
-                  const SizedBox(width: AppDimens.marginVideoCallMedium),
-                  _controlButton(
-                    icon: isScreenSharing
-                        ? Icons.stop_screen_share
-                        : Icons.screen_share,
-                    color: isScreenSharing ? AppColors.primary : AppColors.textWhite,
-                    onTap: _currentChannel != null ? _toggleScreenShare : null,
-                  ),
-                  const SizedBox(width: AppDimens.marginVideoCallMedium),
-                  GestureDetector(
-                    onTap: () => _showEndCallDialog(),
-                    child: const CircleAvatar(
-                      radius: AppDimens.avatarRadiusSmallVideoCall,
-                      backgroundColor: AppColors.error,
-                      child: Icon(Icons.call_end,
-                          color: AppColors.textWhite,
-                          size: AppDimens.iconSizeVideoCall),
-                    ),
-                  ),
-                ],
-              ),
+              _buildControlButtons(isScreenSharing),
               const SizedBox(height: AppDimens.marginVideoCallMedium),
               if (_loading) const AppLoader(),
-              if (!_loading && _currentChannel == null) _buildChannelInput(),
+              if (!_loading && _currentChannel == null)
+                ChannelInputWidget(
+                  controller: _channelController,
+                  onJoinChannel: _joinChannel,
+                ),
               if (_currentChannel != null && !_loading)
-                _buildConnectedLabel(isScreenSharing),
+                ConnectedLabelWidget(
+                  channelName: _currentChannel!,
+                  isScreenSharing: isScreenSharing,
+                ),
             ],
           ),
         );
@@ -496,134 +363,54 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
     );
   }
 
-  Widget _buildChannelInput() {
-    return Column(
+  Widget _buildControlButtons(bool isScreenSharing) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const Text(AppStrings.joinPrompt, style: AppTextStyles.body),
-        const SizedBox(height: AppDimens.marginVideoCallSmall),
-        TextFormField(
-          controller: _channelController,
-          style: const TextStyle(color: AppColors.textWhite),
-          decoration: InputDecoration(
-            hintText: AppStrings.channelHint,
-            hintStyle: const TextStyle(color: AppColors.textMuted),
-            filled: true,
-            fillColor:
-            AppColors.textWhite.withValues(alpha: AppDimens.alphaLowVideoCall),
-            border: OutlineInputBorder(
-              borderRadius:
-              BorderRadius.circular(AppDimens.radiusMediumVideoCall),
-              borderSide: const BorderSide(color: Colors.white24),
-            ),
-            focusedBorder: const OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(10)),
-              borderSide: BorderSide(color: AppColors.primary),
-            ),
-            prefixIcon:
-            const Icon(Icons.meeting_room, color: AppColors.textMuted),
-          ),
-          onFieldSubmitted: (_) => _joinChannel(),
+        VideoControlButton(
+          icon: audioEnabled ? Icons.mic : Icons.mic_off,
+          color: audioEnabled ? AppColors.textWhite : AppColors.error,
+          onTap: () {
+            setState(() => audioEnabled = !audioEnabled);
+            _service.toggleAudio(audioEnabled);
+            _videoBloc.add(ToggleAudioEvent(audioEnabled));
+          },
         ),
-        const SizedBox(height: AppDimens.marginVideoCallSmall),
-        SizedBox(
-          width: double.infinity,
-          child: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.primary,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(AppDimens.radiusMediumVideoCall),
-              ),
-              padding: const EdgeInsets.symmetric(
-                  vertical: AppDimens.paddingVideoCallMedium),
-            ),
-            onPressed: _joinChannel,
-            child: const Text(AppStrings.joinButton, style: AppTextStyles.button),
-          ),
+        const SizedBox(width: AppDimens.marginVideoCallMedium),
+        VideoControlButton(
+          icon: videoEnabled ? Icons.videocam : Icons.videocam_off,
+          color: videoEnabled ? AppColors.textWhite : AppColors.error,
+          onTap: isScreenSharing
+              ? null
+              : () {
+            setState(() => videoEnabled = !videoEnabled);
+            _service.toggleVideo(videoEnabled);
+            _videoBloc.add(ToggleVideoEvent(videoEnabled));
+          },
         ),
-        const SizedBox(height: AppDimens.marginVideoCallTiny),
-        const Text(
-          AppStrings.bothUsersHint,
-          textAlign: TextAlign.center,
-          style: AppTextStyles.body,
+        const SizedBox(width: AppDimens.marginVideoCallMedium),
+        VideoControlButton(
+          icon: Icons.switch_camera,
+          color: AppColors.textWhite,
+          onTap: isScreenSharing ? null : _switchCamera,
+        ),
+        const SizedBox(width: AppDimens.marginVideoCallMedium),
+        VideoControlButton(
+          icon: isScreenSharing ? Icons.stop_screen_share : Icons.screen_share,
+          color: isScreenSharing ? AppColors.primary : AppColors.textWhite,
+          onTap: _currentChannel != null ? _toggleScreenShare : null,
+        ),
+        const SizedBox(width: AppDimens.marginVideoCallMedium),
+        GestureDetector(
+          onTap: () => _showEndCallDialog(),
+          child: const CircleAvatar(
+            radius: AppDimens.avatarRadiusSmallVideoCall,
+            backgroundColor: AppColors.error,
+            child: Icon(Icons.call_end,
+                color: AppColors.textWhite, size: AppDimens.iconSizeVideoCall),
+          ),
         ),
       ],
-    );
-  }
-
-  Widget _buildConnectedLabel(bool isScreenSharing) {
-    return Container(
-      padding: const EdgeInsets.all(AppDimens.paddingVideoCallMedium),
-      decoration: BoxDecoration(
-        color: AppColors.textWhite.withValues(alpha: AppDimens.alphaLowVideoCall),
-        borderRadius: BorderRadius.circular(AppDimens.radiusMediumVideoCall),
-      ),
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                width: AppDimens.statusDotSizeVideoCall,
-                height: AppDimens.statusDotSizeVideoCall,
-                decoration: const BoxDecoration(
-                  color: AppColors.success,
-                  shape: BoxShape.circle,
-                ),
-              ),
-              const SizedBox(width: AppDimens.marginVideoCallSmall),
-              const Text(AppStrings.connectedTo, style: AppTextStyles.body),
-              Flexible(
-                child: Text(
-                  _currentChannel!,
-                  style: const TextStyle(
-                    color: AppColors.textWhite,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-            ],
-          ),
-          if (isScreenSharing) ...[
-            const SizedBox(height: AppDimens.marginVideoCallSmall),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
-                Icon(Icons.screen_share,
-                    size: AppDimens.iconSmallVideoCall, color: AppColors.primary),
-                SizedBox(width: AppDimens.marginVideoCallTiny),
-                Text(AppStrings.screenSharingActive,
-                    style: TextStyle(
-                      color: AppColors.primary,
-                      fontSize: AppDimens.textSmallVideoCall,
-                      fontWeight: FontWeight.w500,
-                    )),
-              ],
-            ),
-          ],
-        ],
-      ),
-    );
-  }
-
-  Widget _controlButton({
-    required IconData icon,
-    required Color color,
-    required VoidCallback? onTap,
-  }) {
-    final isDisabled = onTap == null;
-
-    return GestureDetector(
-      onTap: onTap,
-      child: Opacity(
-        opacity: isDisabled ? AppDimens.opacityDisabledVideoCall : AppDimens.opacityEnabledVideoCall,
-        child: CircleAvatar(
-          radius: AppDimens.avatarRadiusSmallVideoCall,
-          backgroundColor:
-          AppColors.textWhite.withValues(alpha: AppDimens.alphaBackgroundVideoCall),
-          child: Icon(icon, color: color, size: AppDimens.iconSizeVideoCall),
-        ),
-      ),
     );
   }
 }

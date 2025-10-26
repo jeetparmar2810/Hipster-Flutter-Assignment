@@ -1,12 +1,14 @@
 import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import '../blocs/auth/auth_bloc.dart';
 import '../blocs/auth/auth_event.dart';
 import '../blocs/auth/auth_state.dart';
 import '../utils/app_colors.dart';
-import '../utils/app_strings.dart';
 import '../utils/app_dimens.dart';
+import '../utils/app_strings.dart';
 import '../utils/loader/loading_dialog.dart';
 import '../widgets/custom_text_field.dart';
 

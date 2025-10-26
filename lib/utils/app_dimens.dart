@@ -72,6 +72,7 @@ class AppDimens {
 
   static const int durationOneMS = 1;
   static const int durationMS = 2;
+  static const int duration5MS = 5;
   static const int durationShortMS = 150;
   static const int durationMediumMS = 200;
   static const int durationLongMS = 500;

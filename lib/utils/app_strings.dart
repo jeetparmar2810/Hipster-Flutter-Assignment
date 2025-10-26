@@ -65,7 +65,7 @@ class AppStrings {
   static const String enterChannelNameError = 'Please enter a channel name';
   static const String switchCameraError = 'Switch camera error';
   static const String permissionDenied = 'Permission denied';
-  static const String noInternet = 'No internet connection';
+  static const String noInternet = 'Internet connection is required for all video calls.';
 
   // Success Messages
   static const String loginSuccess = 'Login successful';

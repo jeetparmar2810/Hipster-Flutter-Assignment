@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import '../blocs/user/user_bloc.dart';
 import '../blocs/user/user_event.dart';
 import '../blocs/user/user_state.dart';
 import '../repositories/user_repository.dart';
-import '../widgets/user_tile.dart';
-import '../widgets/no_data.dart';
 import '../utils/app_colors.dart';
 import '../utils/app_dimens.dart';
-import '../utils/app_strings.dart';
 import '../utils/app_loader.dart';
+import '../utils/app_strings.dart';
+import '../widgets/no_data.dart';
+import '../widgets/user_tile.dart';
 
 class UserListScreen extends StatelessWidget {
   const UserListScreen({super.key});
